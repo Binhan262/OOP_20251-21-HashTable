@@ -1,29 +1,42 @@
 package Backend.HashTable.CollisionResolver;
-public class SeparateChaining implements CollisionResolver{
-    private final int tablesize;//Not consider dynamic size change
-    //Constructor
-    public SeparateChaining(int tablesize){
+
+import Backend.HashTable.Strategy.ChainingStrategy;
+import Backend.HashTable.Strategy.HashTableStrategy;
+import Backend.LinkedList.LinkedList;
+import Backend.HashTable.Event.HashTableEvent;
+import java.util.function.Consumer;
+
+public class SeparateChaining implements CollisionResolver {
+    private final int tablesize;
+    
+    public SeparateChaining(int tablesize) {
         this.tablesize = tablesize;
     }
-    //Getter
-    public int getTableSize(){
+    
+    public int getTableSize() {
         return this.tablesize;
     }
-    //Override methods
+    
     @Override
-    public int hash(int key){
+    public int hash(int key) {
         return key % this.tablesize;
     }
+    
     @Override
-    public int probe(int key,int i){
+    public int probe(int key, int i) {
         return hash(key); 
     }
+    
     @Override
-    public String getName(){
+    public String getName() {
         return "Separate Chaining";
     }
+    
     @Override
-    public boolean needsProbing(boolean empty) {
-        return false;
+    public HashTableStrategy createStrategy(
+            LinkedList[] table, 
+            int tableSize,
+            Consumer<HashTableEvent> emit) {
+        return new ChainingStrategy(table, this, emit);
     }
 }
