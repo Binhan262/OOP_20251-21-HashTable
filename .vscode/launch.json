@@ -1,0 +1,41 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "FrontEnd.Main.Test",
+            "projectName": "OOP.20251-21_2a10f80e",
+            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "FrontEnd.Main.Main",
+            "projectName": "OOP.20251-21_2a10f80e",
+            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
+        },
+        {
+            "type": "java",
+            "name": "HashTableScreen",
+            "request": "launch",
+            "mainClass": "FrontEnd.HashTableMenu.HashTableScreen",
+            "projectName": "Miniproject_97ffba3f",
+            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
+            "name": "HashTableScreen",
+            "request": "launch",
+            "mainClass": "FrontEnd.HashTableMenu.HashTableScreen",
+            "projectName": "Miniproject_97ffba3f"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "FrontEnd.HashtableMenu.HashTableScreen",
+            "projectName": "OOP.20251-21_170f9d59",
+            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
+        }
+    ]
+}
