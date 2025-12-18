@@ -1,16 +1,16 @@
 {
     "java.project.referencedLibraries": [
-        "sourcecode/lib/javafx.25.0.1/javafx.base.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.controls.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.fxml.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.graphics.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.media.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.swing.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx.web.jar",
-        "sourcecode/lib/javafx.25.0.1/javafx-swt.jar",
-        "sourcecode/lib/javafx.25.0.1/jdk.jsobject.jar",
-        "sourcecode/lib/javafx.25.0.1/jfx.incubator.input.jar",
-        "sourcecode/lib/javafx.25.0.1/jfx.incubator.richtext.jar"
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.controls.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jfx.incubator.input.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.swing.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.media.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.fxml.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.web.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx-swt.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jfx.incubator.richtext.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.base.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jdk.jsobject.jar",
+        "d:\\Code\\Java\\OOP\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.graphics.jar"
     ],
     "java.project.sourcePaths": [
         "sourcecode\\src"
