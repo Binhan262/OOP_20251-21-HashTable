@@ -3,7 +3,6 @@ package FrontEnd.HashTableMenu;
 import Backend.HashTable.HashTable;
 import Backend.HashTable.CollisionResolver.*;
 import Backend.LinkedList.LinkedList;
-import Backend.LinkedList.Node;
 import FrontEnd.Main.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -20,37 +19,29 @@ public class HashTableMenuController {
 
     private HashTableAnimationManager animationManager;
     
-    // FXML Elements - Top Menu 
     @FXML private MenuItem menuBack;
-    
-    // FXML Elements - Left Panel
     @FXML private TextField inputkey;
     @FXML private TextField inputvalue;
     @FXML private Button btnInsert;
     @FXML private Button btnSearch;
     @FXML private Button btnDelete;
-    
-    // FXML Elements - Center Visualization
     @FXML private ScrollPane scrollPaneHorizontal;
     @FXML private ScrollPane scrollPaneVertical;
     @FXML private GridPane horizontalGrid;
     @FXML private GridPane chainingGrid;
-
-    // FXML Elements - Bottom Panel
     @FXML private Label probestep;
     @FXML private Label probefunc;
     @FXML private Label hashfunc;
     @FXML private TextField tfResult;
     
-    // Backend
     private HashTable hashTable;
     private CollisionResolver collisionResolver;
     private int tableSize;
     
-    // Visualization
     private Label[] arrowIndicators; 
     private int currentProbeIndex = -1;
     private boolean isAnimating = false; 
+    
     public void initialize() {
     }
     
@@ -69,7 +60,6 @@ public class HashTableMenuController {
         updateHashFunctionLabel();
     }
 
-    // Event Handlers 
     @FXML
     private void handleInsertpressed() {
         if (isAnimating) {
@@ -146,7 +136,7 @@ public class HashTableMenuController {
         horizontalGrid.getChildren().clear();
         horizontalGrid.getColumnConstraints().clear();
         horizontalGrid.getRowConstraints().clear();
-        arrowIndicators = new Label[tableSize]; // Initialize array
+        arrowIndicators = new Label[tableSize];
 
         for (int i = 0; i < tableSize; i++) {
             ColumnConstraints col = new ColumnConstraints();
@@ -243,7 +233,6 @@ public class HashTableMenuController {
         }
     }
     
-    // Helper methods
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle("Hash Table Visualization");
@@ -272,11 +261,6 @@ public class HashTableMenuController {
             arrowIndicators[currentProbeIndex].setVisible(false);
         }
         currentProbeIndex = -1;
-        
-        // Only reset step when animation is completely done
-        if (!isAnimating && probestep != null) {
-            probestep.setText("i = 0");
-        }
     }
     
     void showProbeArrow(int index) {
@@ -314,16 +298,16 @@ public class HashTableMenuController {
         return nullLabel;
     }
     
+    // FIX VIOLATION #1: Use forEach instead of exposing internal structure
     private List<NodeData> getChainNodes(LinkedList list) {
         List<NodeData> nodes = new ArrayList<>();
         if (list == null) {
             return nodes;
         }
-        Node current = list.getHead();
-        while (current != null) {
-            nodes.add(new NodeData(current.key, current.value));
-            current = current.next;
-        }
+        // Better OOP: Use forEach instead of getHead()
+        list.forEach((key, value) -> {
+            nodes.add(new NodeData(key, value));
+        });
         return nodes;
     }
     

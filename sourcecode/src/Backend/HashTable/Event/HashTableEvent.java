@@ -1,5 +1,4 @@
 package Backend.HashTable.Event;
 
-public interface HashTableEvent {
-    
+public abstract class HashTableEvent {
 }
