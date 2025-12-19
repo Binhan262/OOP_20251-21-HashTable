@@ -26,12 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HashTableMenuController {
+
+    private HashTableAnimationManager animationManager;
     
-    // FXML Elements - Top Menu and Labels
+    // FXML Elements - Top Menu 
     @FXML private MenuItem menuBack;
-    @FXML private Label hashfunc;
-    @FXML private Label probestep;
-    @FXML private Label probefunc;
     
     // FXML Elements - Left Panel
     @FXML private TextField inputkey;
@@ -45,6 +44,13 @@ public class HashTableMenuController {
     @FXML private ScrollPane scrollPaneVertical;
     @FXML private GridPane horizontalGrid;
     @FXML private GridPane chainingGrid;
+
+
+    // FXML Elements - Bottom Panel
+    @FXML private Label probestep;
+    @FXML private Label probefunc;
+    @FXML private Label hashfunc;
+    @FXML private TextField tfResult;
     
     // Backend - NO DEFAULT VALUES
     private HashTable hashTable;
@@ -58,16 +64,20 @@ public class HashTableMenuController {
     
     
     public void initialize() {
-        // Only setup menu action - NO data initialization  
-        // Note: updateVisualization() and other setup will be called
-        // by initializeWithResolver() from the setup screen
-        //Lam them cai man set up thi ms vt tiep dc
     }
     // This method MUST be called before using the controller
     public void initializeWithResolver(CollisionResolver resolver, int size) {
         this.collisionResolver = resolver;
         this.tableSize = size;
         this.hashTable = new HashTable(size, resolver);
+        
+        // Initialize animation manager
+        this.animationManager = new HashTableAnimationManager(this, hashTable);
+        
+        // Set up event listener for menu back button
+        if (menuBack != null) {
+            menuBack.setOnAction(e -> handleMenuBack());
+        }
         
         // Now build the visualization
         updateVisualization();
@@ -93,7 +103,7 @@ public class HashTableMenuController {
         }
         try {
             int key = Integer.parseInt(keyStr);
-            animateInsert(key, value);
+            animationManager.animateInsert(key, value);
         } catch (NumberFormatException e) {
             showAlert("Key must be a number", Alert.AlertType.ERROR);
         }
@@ -115,7 +125,7 @@ public class HashTableMenuController {
         
         try {
             int key = Integer.parseInt(keyStr);
-            animateSearch(key);
+            animationManager.animateSearch(key);
         } catch (NumberFormatException e) {
             showAlert("Key must be a number", Alert.AlertType.ERROR);
         }
@@ -137,7 +147,7 @@ public class HashTableMenuController {
         
         try {
             int key = Integer.parseInt(keyStr);
-            animateDelete(key);
+            animationManager.animateDelete(key);
         } catch (NumberFormatException e) {
             showAlert("Key must be a number", Alert.AlertType.ERROR);
         }
@@ -147,255 +157,7 @@ public class HashTableMenuController {
         Main.setRoot("/FrontEnd/SelectionMenu/SelectionMenu.fxml");
     }
     
-    //Animation methods
-    //Insert
-    private void animateInsert(int key, String value) {
-        isAnimating = true;
-        disableButtons();
-        
-        SequentialTransition sequence = new SequentialTransition();
-        
-        int step = 0;
-        boolean inserted = false;
-        
-        while (step < tableSize) {
-            int index = collisionResolver.probe(key, step);
-            LinkedList list = hashTable.getTableAtIndex(index);
-            
-            final int currentIndex = index;
-            final int currentStep = step;
-            
-            // Show probe arrow
-            PauseTransition showArrow = new PauseTransition(Duration.millis(2000));
-            showArrow.setOnFinished(e -> {
-                showProbeArrow(currentIndex);
-                if (probestep != null) {
-                    probestep.setText(String.valueOf(currentStep));
-                }
-            });
-            sequence.getChildren().add(showArrow);
-            
-            // Check if key already exists in this slot
-            String existingValue = list.search(key);
-            if (existingValue != null) {
-                // Key exists - update value
-                hashTable.insert(key, value);  // This will update the value
-                
-                PauseTransition updatePause = new PauseTransition(Duration.millis(2000));
-                updatePause.setOnFinished(e -> {
-                    updateVisualization();
-                    hideProbeArrow();
-                    showAlert("Key " + key + " already exists at index " + currentIndex + 
-                             "\nValue updated to: " + value, Alert.AlertType.INFORMATION);
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(updatePause);
-                inserted = true;
-                break;
-            }
-            
-            // Check if we can insert here (empty slot)
-            if (!collisionResolver.needsProbing(list.isEmpty())) {
-                // Insert here
-                final boolean insertResult = hashTable.insert(key, value);
-                
-                PauseTransition insertPause = new PauseTransition(Duration.millis(2000));
-                insertPause.setOnFinished(e -> {
-                    updateVisualization();
-                    hideProbeArrow();
-                    if (insertResult) {
-                        showAlert("Key " + key + " inserted at index " + currentIndex, Alert.AlertType.INFORMATION);
-                    } else {
-                        showAlert("Insertion failed", Alert.AlertType.ERROR);
-                    }
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(insertPause);
-                inserted = true;
-                break;
-            }
-            
-            step++;
-        }
-        
-        if (!inserted) {
-            PauseTransition failPause = new PauseTransition(Duration.millis(2000));
-            failPause.setOnFinished(e -> {
-                hideProbeArrow();
-                showAlert("Hash table is full or no suitable slot found", Alert.AlertType.ERROR);
-                isAnimating = false;
-                enableButtons();
-            });
-            sequence.getChildren().add(failPause);
-        }
-        
-        sequence.play();
-    }
-    //Search
-    private void animateSearch(int key) {
-        isAnimating = true;
-        disableButtons();
-        
-        SequentialTransition sequence = new SequentialTransition();
-        
-        int step = 0;
-        boolean found = false;
-        
-        while (step < tableSize) {
-            int index = collisionResolver.probe(key, step);
-            LinkedList list = hashTable.getTableAtIndex(index);
-            
-            final int currentIndex = index;
-            final int currentStep = step;
-            
-            // Show probe arrow
-            PauseTransition showArrow = new PauseTransition(Duration.millis(2000));
-            showArrow.setOnFinished(e -> {
-                showProbeArrow(currentIndex);
-                if (probestep != null) {
-                    probestep.setText(String.valueOf(currentStep));
-                }
-            });
-            sequence.getChildren().add(showArrow);
-            
-            // Check if key exists
-            String foundValue = list.search(key);
-            if (foundValue != null) {
-                PauseTransition foundPause = new PauseTransition(Duration.millis(2000));
-                foundPause.setOnFinished(e -> {
-                    hideProbeArrow();
-                    showAlert("Key " + key + " found at index " + currentIndex + "\nValue: " + foundValue, 
-                             Alert.AlertType.INFORMATION);
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(foundPause);
-                found = true;
-                break;
-            }
-            
-            // If empty slot in open addressing, stop searching
-            if (collisionResolver.needsProbing(false) && list.isEmpty()) {
-                PauseTransition notFoundPause = new PauseTransition(Duration.millis(2000));
-                notFoundPause.setOnFinished(e -> {
-                    hideProbeArrow();
-                    showAlert("Key " + key + " not found (empty slot encountered)", Alert.AlertType.INFORMATION);
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(notFoundPause);
-                found = true; // To exit while loop
-                break;
-            }
-            
-            step++;
-        }
-        
-        if (!found) {
-            PauseTransition notFoundPause = new PauseTransition(Duration.millis(2000));
-            notFoundPause.setOnFinished(e -> {
-                hideProbeArrow();
-                showAlert("Key " + key + " not found", Alert.AlertType.INFORMATION);
-                isAnimating = false;
-                enableButtons();
-            });
-            sequence.getChildren().add(notFoundPause);
-        }
-        
-        sequence.play();
-    }
-    //Delete
-    private void animateDelete(int key) {
-        isAnimating = true;
-        disableButtons();
-        
-        SequentialTransition sequence = new SequentialTransition();
-        
-        int step = 0;
-        boolean deleted = false;
-        
-        while (step < tableSize) {
-            int index = collisionResolver.probe(key, step);
-            LinkedList list = hashTable.getTableAtIndex(index);
-            
-            final int currentIndex = index;
-            final int currentStep = step;
-            
-            // Show probe arrow
-            PauseTransition showArrow = new PauseTransition(Duration.millis(2000));
-            showArrow.setOnFinished(e -> {
-                showProbeArrow(currentIndex);
-                if (probestep != null) {
-                    probestep.setText(String.valueOf(currentStep));
-                }
-            });
-            sequence.getChildren().add(showArrow);
-            
-            // Check if key exists and delete
-            if (list.search(key) != null) {
-                final boolean deleteResult = hashTable.delete(key);
-                
-                PauseTransition deletePause = new PauseTransition(Duration.millis(2000));
-                deletePause.setOnFinished(e -> {
-                    updateVisualization();
-                    hideProbeArrow();
-                    if (deleteResult) {
-                        showAlert("Key " + key + " deleted from index " + currentIndex, Alert.AlertType.INFORMATION);
-                    } else {
-                        showAlert("Deletion failed", Alert.AlertType.ERROR);
-                    }
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(deletePause);
-                deleted = true;
-                break;
-            }
-            
-            // If empty slot in open addressing, stop searching
-            if (collisionResolver.needsProbing(false) && list.isEmpty()) {
-                PauseTransition notFoundPause = new PauseTransition(Duration.millis(2000));
-                notFoundPause.setOnFinished(e -> {
-                    hideProbeArrow();
-                    showAlert("Key " + key + " not found (empty slot encountered)", Alert.AlertType.INFORMATION);
-                    isAnimating = false;
-                    enableButtons();
-                });
-                sequence.getChildren().add(notFoundPause);
-                deleted = true; // To exit while loop
-                break;
-            }
-            
-            step++;
-        }
-        
-        if (!deleted) {
-            PauseTransition notFoundPause = new PauseTransition(Duration.millis(2000));
-            notFoundPause.setOnFinished(e -> {
-                hideProbeArrow();
-                showAlert("Key " + key + " not found", Alert.AlertType.INFORMATION);
-                isAnimating = false;
-                enableButtons();
-            });
-            sequence.getChildren().add(notFoundPause);
-        }
-        
-        sequence.play();
-    }
-    //Visualization methods
-    private void updateVisualization() {
-        if (collisionResolver instanceof SeparateChaining) {
-            buildChainingVisualization();
-            scrollPaneHorizontal.setVisible(false);
-            scrollPaneVertical.setVisible(true);
-        } else {
-            buildOpenAddressingVisualization();
-            scrollPaneHorizontal.setVisible(true);
-            scrollPaneVertical.setVisible(false);
-        }
-    }
+    
 
     private void buildOpenAddressingVisualization(){
         //Reset grid
@@ -508,20 +270,18 @@ public class HashTableMenuController {
         alert.show();
     }
     //Button state helper
-    private void disableButtons() {
+    void disableButtons() {
         if (btnInsert != null) btnInsert.setDisable(true);
         if (btnSearch != null) btnSearch.setDisable(true);
         if (btnDelete != null) btnDelete.setDisable(true);
     }
-    private void enableButtons() {
+    void enableButtons() {
         if (btnInsert != null) btnInsert.setDisable(false);
         if (btnSearch != null) btnSearch.setDisable(false);
         if (btnDelete != null) btnDelete.setDisable(false);
     }
     //Arrow helper(opend addressing) 
-    //Doan nay t nghi nen chi de chi o hien tai thoi 
-    //Ko chi nh qua lai ko bt dang chi cai gi nua
-    private void hideProbeArrow() {
+    void hideProbeArrow() {
         if (currentProbeIndex >= 0 && currentProbeIndex < arrowIndicators.length 
             && arrowIndicators[currentProbeIndex] != null) {
             arrowIndicators[currentProbeIndex].setVisible(false);
@@ -532,7 +292,7 @@ public class HashTableMenuController {
             probestep.setText("0");
         }
     }
-    private void showProbeArrow(int index) {
+    void showProbeArrow(int index) {
         hideProbeArrow();
         if (!(collisionResolver instanceof SeparateChaining) && 
             index >= 0 && index < arrowIndicators.length && 
@@ -623,7 +383,7 @@ public class HashTableMenuController {
     }
     //Update hash function label
     private void updateHashFunctionLabel() {
-        String funcText = "k mod " + tableSize;
+        String funcText = "h(k) = k mod " + tableSize;
         if (hashfunc != null) {
             hashfunc.setText(funcText);
         }
@@ -643,5 +403,35 @@ public class HashTableMenuController {
             this.key = key;
             this.value = value;
         }
+    }
+    //Visualization methods
+        public void updateVisualization() {
+        if (collisionResolver instanceof SeparateChaining) {
+            if (scrollPaneVertical != null) scrollPaneVertical.setVisible(true);
+            if (scrollPaneHorizontal != null) scrollPaneHorizontal.setVisible(false);
+            buildChainingVisualization();
+        } else {
+            if (scrollPaneHorizontal != null) scrollPaneHorizontal.setVisible(true);
+            if (scrollPaneVertical != null) scrollPaneVertical.setVisible(false);
+            buildOpenAddressingVisualization();
+        }
+    }
+    public void setProbeStep(int step) {
+        probestep.setText("i = " + String.valueOf(step));
+    }
+
+    public void setResultText(String text) {
+        tfResult.setText(text);
+    }
+    public GridPane getHorizontalGrid() {
+        return horizontalGrid;
+    }
+
+    public GridPane getChainingGrid() {
+        return chainingGrid;
+    }
+
+    public CollisionResolver getCollisionResolver() {
+        return collisionResolver;
     }
 }

@@ -52,19 +52,28 @@ public class HashTable {
     }
     //Insert
     public boolean insert(int key, String value){
-        int step = 0;
-        while(step < tablesize){
-            int index = collisionResolver.probe(key, step);
-            emit(new BucketAccessedEvent(index));
-            if(!collisionResolver.needsProbing(table[index].isEmpty())){
-                table[index].insert(key, value);
-                return true; //Inserted successfully
-            }
-            emit(new CollisionDetectedEvent(index));
-            step++;
+    int step = 0;
+    while(step < tablesize){
+        int index = collisionResolver.probe(key, step);
+        emit(new BucketAccessedEvent(index));
+        
+        String existing = table[index].search(key);
+        if(existing != null){
+            table[index].insert(key, value);
+            return true;
         }
-        return false; //No suitable slot found
+        
+        if(!collisionResolver.needsProbing(table[index].isEmpty())){
+            table[index].insert(key, value);
+            return true;
+        }
+        
+        emit(new CollisionDetectedEvent(index));
+        step++;
     }
+    return false;
+    }
+
     //Search by key and return value 
     public String search(int key){
         int step = 0;

@@ -51,31 +51,27 @@ public class LinkedList {
     }
     //Insert(Check if exist same key first)
     public void insert(int key, String value) {
-        Node cur=head;
-        emit(new NodeVisitedEvent(cur.getKey()));
-        //Check if exist same key->Upgrade value
-        while(cur!=null){
-            if(cur.key==key) cur.value=value;           
-            cur=cur.next;
-            emit(new NodeVisitedEvent(cur.getKey()));
-        }
-        //Insert new node
-        Node newNode=new Node(key,value);
-        if(head==null){
-            head=newNode;
-            emit(new NodeInsertEvent(key, value));
-        }
-        else{
-            cur=head;
-            emit(new NodeVisitedEvent(cur.getKey()));
-            while(cur.next!=null){
-                cur=cur.next;
-                emit(new NodeVisitedEvent(cur.getKey()));
-            }
-            cur.next=newNode;
-            emit(new NodeInsertEvent(key, value));
-        }
+    if(head == null) {
+        head = new Node(key, value);
+        emit(new NodeInsertEvent(key, value));
+        return;
     }
+    
+    Node cur = head;
+    while(cur != null) {
+        emit(new NodeVisitedEvent(cur.getKey()));
+        if(cur.key == key) {
+            cur.value = value;
+            return; 
+        }
+        if(cur.next == null) break; 
+        cur = cur.next;
+    }
+    
+    // Insert at end (cur is now the last node)
+    cur.next = new Node(key, value);
+    emit(new NodeInsertEvent(key, value));
+}
     //Delete 
     public boolean delete(int key) {
         if(head==null){

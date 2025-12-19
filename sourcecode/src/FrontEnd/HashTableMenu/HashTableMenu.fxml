@@ -28,73 +28,13 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <HBox prefHeight="18.0" prefWidth="600.0">
-               <children>
-                  <Label text="Hash Function: h(k) =">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="hashfunc" text="0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="18.0" prefWidth="600.0">
-               <children>
-                  <Label text="Probe Step: i =">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="probestep" text="0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="18.0" prefWidth="600.0">
-               <children>
-                  <Label text="Probe Function: ">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="probefunc" text="Linear Probing">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                  </Label>
-               </children>
-            </HBox>
          </children>
       </VBox>
    </top>
    <center>
       <StackPane prefHeight="618.0" prefWidth="1109.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane fx:id="scrollPaneHorizontal" fitToHeight="false" fitToWidth="false" prefHeight="200.0" prefWidth="200.0">
+            <ScrollPane fx:id="scrollPaneHorizontal" fitToHeight="false" fitToWidth="false" prefHeight="573.0" prefWidth="1106.0">
                <content>
                   <GridPane fx:id="horizontalGrid" alignment="CENTER" hgap="5.0" vgap="10.0">
                      <padding>
@@ -120,7 +60,7 @@
          <children>
             <Label text="Key: ">
                <font>
-                  <Font size="24.0" />
+                  <Font name="System Bold" size="24.0" />
                </font>
                <padding>
                   <Insets left="10.0" />
@@ -129,7 +69,7 @@
             <TextField fx:id="inputkey" />
             <Label text="Value: ">
                <font>
-                  <Font size="24.0" />
+                  <Font name="System Bold" size="24.0" />
                </font>
                <padding>
                   <Insets left="10.0" />
@@ -157,4 +97,75 @@
          </padding>
       </VBox>
    </left>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="100.0" prefWidth="362.0">
+               <children>
+                  <HBox prefHeight="26.0" prefWidth="138.0">
+                     <children>
+                        <Label text="Probe Function: ">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="probefunc" text="Linear Probing">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="18.0" prefWidth="600.0">
+                     <children>
+                        <Label text="Hash Function:">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="hashfunc" text="h(k) = 0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="18.0" prefWidth="600.0">
+                     <children>
+                        <Label text="Probe Step:">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="probestep" text="i = 0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets left="5.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <TextField fx:id="tfResult" prefHeight="100.0" prefWidth="557.0" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
