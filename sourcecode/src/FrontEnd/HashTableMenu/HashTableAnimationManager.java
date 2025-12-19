@@ -39,7 +39,6 @@ public class HashTableAnimationManager {
         }
     }
     
-    // FIX BUG 1: Direct access to controller's state
     public boolean isAnimating() {
         return controller.isAnimating();
     }
@@ -215,7 +214,6 @@ public class HashTableAnimationManager {
         return pause;
     }
     
-    // OOP: Use polymorphism instead of instanceof
     private void highlightBucket(int index, Color color) {
         CollisionResolver.VisualizationType vizType = 
             hashTable.getResolver().getVisualizationType();

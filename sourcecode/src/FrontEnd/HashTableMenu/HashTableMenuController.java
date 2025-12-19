@@ -48,10 +48,9 @@ public class HashTableMenuController {
     private int tableSize;
     
     // Visualization
-    private Label[] arrowIndicators; // FIX BUG 2: Can be null until initialized
+    private Label[] arrowIndicators; 
     private int currentProbeIndex = -1;
-    private boolean isAnimating = false; // FIX BUG 1: Single source of truth
-    
+    private boolean isAnimating = false; 
     public void initialize() {
     }
     
@@ -163,7 +162,6 @@ public class HashTableMenuController {
             horizontalGrid.getRowConstraints().add(row);
         }
         
-        // FIX BUG 2: Initialize all arrow indicators
         for (int i = 0; i < tableSize; i++) {
             Label arrow = new Label("↓");
             arrow.setFont(Font.font(24));
@@ -189,13 +187,11 @@ public class HashTableMenuController {
         chainingGrid.getColumnConstraints().clear();
         chainingGrid.getRowConstraints().clear();
         
-        // FIX BUG 2: Set arrowIndicators to null for chaining mode
         arrowIndicators = null;
         
         int maxColumns = 3;
         for (int i = 0; i < tableSize; i++) {
             LinkedList list = hashTable.getTableAtIndex(i);
-            // FIX BUG 3: Check for null list
             if (list == null) {
                 continue;
             }
@@ -224,7 +220,6 @@ public class HashTableMenuController {
             chainingGrid.add(indexCell, col++, row);
             
             LinkedList list = hashTable.getTableAtIndex(row);
-            // FIX BUG 3: Handle null list safely
             List<NodeData> nodes = (list != null) ? getChainNodes(list) : new ArrayList<>();
             
             if (nodes.isEmpty()) {
@@ -269,9 +264,7 @@ public class HashTableMenuController {
         if (btnDelete != null) btnDelete.setDisable(false);
     }
     
-    // FIX BUG 2: Safely handle null arrowIndicators
     void hideProbeArrow() {
-        // FIX BUG 2: Check if arrowIndicators exists
         if (arrowIndicators != null && 
             currentProbeIndex >= 0 && 
             currentProbeIndex < arrowIndicators.length 
@@ -286,9 +279,7 @@ public class HashTableMenuController {
         }
     }
     
-    // FIX BUG 2: Safely handle null arrowIndicators
     void showProbeArrow(int index) {
-        // FIX BUG 2: Check if arrowIndicators exists
         if (arrowIndicators != null && 
             currentProbeIndex >= 0 && 
             currentProbeIndex < arrowIndicators.length 
@@ -296,10 +287,9 @@ public class HashTableMenuController {
             arrowIndicators[currentProbeIndex].setVisible(false);
         }
         
-        // OOP: Use polymorphism
         if (collisionResolver.getVisualizationType() == 
             CollisionResolver.VisualizationType.OPEN_ADDRESSING && 
-            arrowIndicators != null && // FIX BUG 2: Check null
+            arrowIndicators != null && 
             index >= 0 && 
             index < arrowIndicators.length && 
             arrowIndicators[index] != null) {
@@ -326,7 +316,6 @@ public class HashTableMenuController {
     
     private List<NodeData> getChainNodes(LinkedList list) {
         List<NodeData> nodes = new ArrayList<>();
-        // FIX BUG 3: Handle null list
         if (list == null) {
             return nodes;
         }
@@ -383,7 +372,6 @@ public class HashTableMenuController {
     }
     
     private VBox createHashCellFromList(int index, LinkedList list) {
-        // FIX BUG 3: Handle null list
         if (list == null) {
             return createHashCell(index, "", "");
         }
@@ -419,7 +407,6 @@ public class HashTableMenuController {
     }
     
     public void updateVisualization() {
-        // OOP: Use polymorphism
         if (collisionResolver.getVisualizationType() == 
             CollisionResolver.VisualizationType.CHAINING) {
             if (scrollPaneVertical != null) scrollPaneVertical.setVisible(true);
@@ -444,12 +431,10 @@ public class HashTableMenuController {
         }
     }
     
-    // FIX BUG 1: Public getter for animation state
     public boolean isAnimating() {
         return isAnimating;
     }
     
-    // FIX BUG 1: Public setter for animation state
     public void setAnimating(boolean animating) {
         this.isAnimating = animating;
     }
