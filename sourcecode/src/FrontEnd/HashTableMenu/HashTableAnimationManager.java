@@ -10,13 +10,8 @@ import javafx.util.Duration;
 import java.util.Queue;
 
 import Backend.HashTable.HashTable;
-import Backend.HashTable.CollisionResolver.SeparateChaining;
-import Backend.HashTable.Event.BucketAccessedEvent;
-import Backend.HashTable.Event.CollisionDetectedEvent;
-import Backend.HashTable.Event.HashTableEvent;
-import Backend.HashTable.Event.NodeDeletedEvent;
-import Backend.HashTable.Event.NodeInsertEvent;
-import Backend.HashTable.Event.NodeVisitedEvent;
+import Backend.HashTable.CollisionResolver.CollisionResolver;
+import Backend.HashTable.Event.*;
 import Backend.LinkedList.LinkedList;
 
 public class HashTableAnimationManager {
@@ -24,7 +19,6 @@ public class HashTableAnimationManager {
     private final HashTableMenuController controller;
     private final HashTable hashTable;
     private final Queue<HashTableEvent> eventQueue;
-    private boolean isAnimating;
     
     // Animation settings
     private static final double STEP_DELAY = 800; 
@@ -34,7 +28,6 @@ public class HashTableAnimationManager {
         this.controller = controller;
         this.hashTable = hashTable;
         this.eventQueue = new java.util.LinkedList<>();
-        this.isAnimating = false;
         
         hashTable.setEventSink(event -> eventQueue.offer(event));
         
@@ -46,15 +39,16 @@ public class HashTableAnimationManager {
         }
     }
     
+    // FIX BUG 1: Direct access to controller's state
     public boolean isAnimating() {
-        return isAnimating;
+        return controller.isAnimating();
     }
     
     // Insert Animation
     public void animateInsert(int key, String value) {
-        if (isAnimating) return;
+        if (isAnimating()) return;
         
-        isAnimating = true;
+        controller.setAnimating(true);
         controller.disableButtons();
         controller.hideProbeArrow();
         eventQueue.clear();
@@ -69,16 +63,16 @@ public class HashTableAnimationManager {
             }
             controller.updateVisualization();
             controller.hideProbeArrow();
-            isAnimating = false;
+            controller.setAnimating(false);
             controller.enableButtons();
         });
     }
     
     // Search Animation
     public void animateSearch(int key) {
-        if (isAnimating) return;
+        if (isAnimating()) return;
         
-        isAnimating = true;
+        controller.setAnimating(true);
         controller.disableButtons();
         controller.hideProbeArrow();
         eventQueue.clear();
@@ -92,24 +86,22 @@ public class HashTableAnimationManager {
                 controller.setResultText("Key " + key + " not found in the table");
             }
             controller.hideProbeArrow();
-            isAnimating = false;
+            controller.setAnimating(false);
             controller.enableButtons();
         });
     }
     
     // Delete Animation
     public void animateDelete(int key) {
-        if (isAnimating) return;
+        if (isAnimating()) return;
         
-        isAnimating = true;
+        controller.setAnimating(true);
         controller.disableButtons();
         controller.hideProbeArrow();
         eventQueue.clear();
         
-        // Execute the delete operation
         boolean success = hashTable.delete(key);
         
-        // Process the events with animation
         processEventQueue(() -> {
             if (success) {
                 controller.setResultText("Successfully deleted key " + key);
@@ -118,7 +110,7 @@ public class HashTableAnimationManager {
             }
             controller.updateVisualization();
             controller.hideProbeArrow();
-            isAnimating = false;
+            controller.setAnimating(false);
             controller.enableButtons();
         });
     }
@@ -187,17 +179,13 @@ public class HashTableAnimationManager {
                 );
                 sequence.getChildren().add(setWhite);
             }
-
             else if (event instanceof NodeVisitedEvent) {
-                // Chain traversal animation (for separate chaining)
                 PauseTransition pause = createPause(STEP_DELAY / 2, () -> {});
                 sequence.getChildren().add(pause);
             }
-
             else if (event instanceof NodeInsertEvent) {
                 NodeInsertEvent nie = (NodeInsertEvent) event;
                 
-                // Flash green to indicate successful insertion
                 PauseTransition flash = createPause(FLASH_DURATION, () -> 
                     controller.setResultText("Inserting key " + nie.getKey() + "...")
                 );
@@ -206,11 +194,9 @@ public class HashTableAnimationManager {
                 PauseTransition holdColor = new PauseTransition(Duration.millis(FLASH_DURATION));
                 sequence.getChildren().add(holdColor);
             }
-
             else if (event instanceof NodeDeletedEvent) {
                 NodeDeletedEvent nde = (NodeDeletedEvent) event;
                 
-                // Flash to indicate deletion
                 PauseTransition flash = createPause(FLASH_DURATION, () -> 
                     controller.setResultText("Deleting key " + nde.getKey() + "...")
                 );
@@ -223,19 +209,24 @@ public class HashTableAnimationManager {
         sequence.play();
     }
     
-    // Helper method to create pause with action
     private PauseTransition createPause(double millis, Runnable action) {
         PauseTransition pause = new PauseTransition(Duration.millis(millis));
         pause.setOnFinished(e -> action.run());
         return pause;
     }
     
-    // Highlight a bucket in the visualization
+    // OOP: Use polymorphism instead of instanceof
     private void highlightBucket(int index, Color color) {
-        if (controller.getCollisionResolver() instanceof SeparateChaining) {
-            highlightChainingBucket(index, color);
-        } else {
-            highlightOpenAddressingBucket(index, color);
+        CollisionResolver.VisualizationType vizType = 
+            hashTable.getResolver().getVisualizationType();
+        
+        switch (vizType) {
+            case CHAINING:
+                highlightChainingBucket(index, color);
+                break;
+            case OPEN_ADDRESSING:
+                highlightOpenAddressingBucket(index, color);
+                break;
         }
     }
     
@@ -243,7 +234,6 @@ public class HashTableAnimationManager {
         GridPane grid = controller.getHorizontalGrid();
         if (grid == null) return;
         
-        // Find the VBox at column=index, row=1
         grid.getChildren().stream()
             .filter(node -> node instanceof VBox)
             .filter(node -> GridPane.getColumnIndex(node) != null && 
@@ -262,7 +252,6 @@ public class HashTableAnimationManager {
         GridPane grid = controller.getChainingGrid();
         if (grid == null) return;
         
-        // Find the first VBox at row=index 
         grid.getChildren().stream()
             .filter(node -> node instanceof VBox)
             .filter(node -> GridPane.getRowIndex(node) != null && 

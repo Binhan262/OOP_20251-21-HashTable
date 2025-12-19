@@ -1,8 +1,3 @@
-//Carefull: Read careafully before modifying anything in this file or create anything related to it
-//Carefull: Read careafully before modifying anything in this file or create anything related to it
-//Carefull: Read careafully before modifying anything in this file or create anything related to it
-
-
 package FrontEnd.HashTableMenu;
 
 import Backend.HashTable.HashTable;
@@ -41,59 +36,54 @@ public class HashTableMenuController {
     @FXML private GridPane horizontalGrid;
     @FXML private GridPane chainingGrid;
 
-
     // FXML Elements - Bottom Panel
     @FXML private Label probestep;
     @FXML private Label probefunc;
     @FXML private Label hashfunc;
     @FXML private TextField tfResult;
     
-    // Backend - NO DEFAULT VALUES
+    // Backend
     private HashTable hashTable;
     private CollisionResolver collisionResolver;
     private int tableSize;
     
     // Visualization
-    private Label[] arrowIndicators;
+    private Label[] arrowIndicators; // FIX BUG 2: Can be null until initialized
     private int currentProbeIndex = -1;
-    private boolean isAnimating = false;
-    
+    private boolean isAnimating = false; // FIX BUG 1: Single source of truth
     
     public void initialize() {
     }
-    // This method MUST be called before using the controller
+    
     public void initializeWithResolver(CollisionResolver resolver, int size) {
         this.collisionResolver = resolver;
         this.tableSize = size;
         this.hashTable = new HashTable(size, resolver);
         
-        // Initialize animation manager
         this.animationManager = new HashTableAnimationManager(this, hashTable);
         
-        // Set up event listener for menu back button
         if (menuBack != null) {
             menuBack.setOnAction(e -> handleMenuBack());
         }
         
-        // Now build the visualization
         updateVisualization();
         updateHashFunctionLabel();
     }
 
-    //Event Handlers 
+    // Event Handlers 
     @FXML
-    private void handleInsertpressed(){
-        if(isAnimating){
+    private void handleInsertpressed() {
+        if (isAnimating) {
             showAlert("Please wait for current operation to complete", Alert.AlertType.WARNING);
             return;
         } 
         String keyStr = inputkey.getText();
         String value = inputvalue.getText();
-        if(keyStr==null || keyStr.isEmpty()){
+        if (keyStr == null || keyStr.isEmpty()) {
             showAlert("Please enter a key", Alert.AlertType.WARNING);
             return;
         }
-        if(value==null || value.isEmpty()){
+        if (value == null || value.isEmpty()) {
             showAlert("Please enter a value", Alert.AlertType.WARNING);
             return;
         }
@@ -149,34 +139,31 @@ public class HashTableMenuController {
         }
     }    
     
-    private void handleMenuBack(){
+    private void handleMenuBack() {
         Main.setRoot("/FrontEnd/SelectionMenu/SelectionMenu.fxml");
     }
     
-    
-
-    private void buildOpenAddressingVisualization(){
-        //Reset grid
+    private void buildOpenAddressingVisualization() {
         horizontalGrid.getChildren().clear();
         horizontalGrid.getColumnConstraints().clear();
         horizontalGrid.getRowConstraints().clear();
-        arrowIndicators = new Label[tableSize];
+        arrowIndicators = new Label[tableSize]; // Initialize array
 
-        //Setup columns
         for (int i = 0; i < tableSize; i++) {
             ColumnConstraints col = new ColumnConstraints();
             col.setHgrow(Priority.NEVER);
             col.setPrefWidth(Region.USE_COMPUTED_SIZE);
             horizontalGrid.getColumnConstraints().add(col);
         }
-        //Setup 2 rows
+        
         for (int i = 0; i < 2; i++) {
             RowConstraints row = new RowConstraints();
             row.setVgrow(Priority.NEVER);
             row.setPrefHeight(Region.USE_COMPUTED_SIZE);
             horizontalGrid.getRowConstraints().add(row);
         }
-        //Row 0: Arrows
+        
+        // FIX BUG 2: Initialize all arrow indicators
         for (int i = 0; i < tableSize; i++) {
             Label arrow = new Label("↓");
             arrow.setFont(Font.font(24));
@@ -189,7 +176,7 @@ public class HashTableMenuController {
             horizontalGrid.add(arrow, i, 0);
             GridPane.setHalignment(arrow, HPos.CENTER);
         }
-        //Row 1: Cells
+        
         for (int i = 0; i < tableSize; i++) {
             LinkedList list = hashTable.getTableAtIndex(i);
             VBox cell = createHashCellFromList(i, list);
@@ -202,37 +189,43 @@ public class HashTableMenuController {
         chainingGrid.getColumnConstraints().clear();
         chainingGrid.getRowConstraints().clear();
         
-        // Find max columns
-        int maxColumns = 3;//Minimum columns
+        // FIX BUG 2: Set arrowIndicators to null for chaining mode
+        arrowIndicators = null;
+        
+        int maxColumns = 3;
         for (int i = 0; i < tableSize; i++) {
             LinkedList list = hashTable.getTableAtIndex(i);
+            // FIX BUG 3: Check for null list
+            if (list == null) {
+                continue;
+            }
             int chainLength = list.getLength();
             int cols = 1 + (chainLength == 0 ? 2 : chainLength * 2 + 2);
             maxColumns = Math.max(maxColumns, cols);
         }
-        // Setup columns
+        
         for (int i = 0; i < maxColumns; i++) {
             ColumnConstraints col = new ColumnConstraints();
             col.setHgrow(Priority.NEVER);
             col.setPrefWidth(Region.USE_COMPUTED_SIZE);
             chainingGrid.getColumnConstraints().add(col);
         }
-        // Setup rows
+        
         for (int i = 0; i < tableSize; i++) {
             RowConstraints row = new RowConstraints();
             row.setVgrow(Priority.NEVER);
             row.setPrefHeight(Region.USE_COMPUTED_SIZE);
             chainingGrid.getRowConstraints().add(row);
         }
-        // Build each row
+        
         for (int row = 0; row < tableSize; row++) {
             int col = 0;
-            // Index cell
             VBox indexCell = createHashCell(row, "", "");
             chainingGrid.add(indexCell, col++, row);
             
             LinkedList list = hashTable.getTableAtIndex(row);
-            List<NodeData> nodes = getChainNodes(list);
+            // FIX BUG 3: Handle null list safely
+            List<NodeData> nodes = (list != null) ? getChainNodes(list) : new ArrayList<>();
             
             if (nodes.isEmpty()) {
                 Label arrow = createArrowLabel();
@@ -240,8 +233,7 @@ public class HashTableMenuController {
                 
                 Label nullLabel = createNullLabel();
                 chainingGrid.add(nullLabel, col++, row);
-            } 
-            else {
+            } else {
                 for (NodeData nodeData : nodes) {
                     Label arrow = createArrowLabel();
                     chainingGrid.add(arrow, col++, row);
@@ -256,8 +248,7 @@ public class HashTableMenuController {
         }
     }
     
-    //Helper methods
-    //Alert helper
+    // Helper methods
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle("Hash Table Visualization");
@@ -265,39 +256,58 @@ public class HashTableMenuController {
         alert.setContentText(message);
         alert.show();
     }
-    //Button state helper
+    
     void disableButtons() {
         if (btnInsert != null) btnInsert.setDisable(true);
         if (btnSearch != null) btnSearch.setDisable(true);
         if (btnDelete != null) btnDelete.setDisable(true);
     }
+    
     void enableButtons() {
         if (btnInsert != null) btnInsert.setDisable(false);
         if (btnSearch != null) btnSearch.setDisable(false);
         if (btnDelete != null) btnDelete.setDisable(false);
     }
-    //Arrow helper(opend addressing) 
+    
+    // FIX BUG 2: Safely handle null arrowIndicators
     void hideProbeArrow() {
-        if (currentProbeIndex >= 0 && currentProbeIndex < arrowIndicators.length 
+        // FIX BUG 2: Check if arrowIndicators exists
+        if (arrowIndicators != null && 
+            currentProbeIndex >= 0 && 
+            currentProbeIndex < arrowIndicators.length 
             && arrowIndicators[currentProbeIndex] != null) {
             arrowIndicators[currentProbeIndex].setVisible(false);
         }
-        //Reset next time
         currentProbeIndex = -1;
-        if (probestep != null) {
-            probestep.setText("0");
+        
+        // Only reset step when animation is completely done
+        if (!isAnimating && probestep != null) {
+            probestep.setText("i = 0");
         }
     }
+    
+    // FIX BUG 2: Safely handle null arrowIndicators
     void showProbeArrow(int index) {
-        hideProbeArrow();
-        if (!(collisionResolver instanceof SeparateChaining) && 
-            index >= 0 && index < arrowIndicators.length && 
+        // FIX BUG 2: Check if arrowIndicators exists
+        if (arrowIndicators != null && 
+            currentProbeIndex >= 0 && 
+            currentProbeIndex < arrowIndicators.length 
+            && arrowIndicators[currentProbeIndex] != null) {
+            arrowIndicators[currentProbeIndex].setVisible(false);
+        }
+        
+        // OOP: Use polymorphism
+        if (collisionResolver.getVisualizationType() == 
+            CollisionResolver.VisualizationType.OPEN_ADDRESSING && 
+            arrowIndicators != null && // FIX BUG 2: Check null
+            index >= 0 && 
+            index < arrowIndicators.length && 
             arrowIndicators[index] != null) {
             arrowIndicators[index].setVisible(true);
             currentProbeIndex = index;
         }
     }
-    //Arrow helper(chaining)
+    
     private Label createArrowLabel() {
         Label arrow = new Label("→");
         arrow.setFont(Font.font(20));
@@ -313,10 +323,13 @@ public class HashTableMenuController {
         nullLabel.setAlignment(Pos.CENTER_LEFT);
         return nullLabel;
     }
-    //Chainning visualization helper
-    //Copy of backend data
+    
     private List<NodeData> getChainNodes(LinkedList list) {
         List<NodeData> nodes = new ArrayList<>();
+        // FIX BUG 3: Handle null list
+        if (list == null) {
+            return nodes;
+        }
         Node current = list.getHead();
         while (current != null) {
             nodes.add(new NodeData(current.key, current.value));
@@ -324,7 +337,7 @@ public class HashTableMenuController {
         }
         return nodes;
     }
-    //Create chaining node
+    
     private VBox createChainNode(String key, String value) {
         VBox node = new VBox(5);
         node.setAlignment(Pos.CENTER);
@@ -342,7 +355,7 @@ public class HashTableMenuController {
         node.getChildren().addAll(keyLabel, valueLabel);
         return node;
     }
-    //Create cell from list(opend addressing)
+    
     private VBox createHashCell(int index, String key, String value) {
         VBox cell = new VBox(5);
         cell.setAlignment(Pos.CENTER);
@@ -368,7 +381,12 @@ public class HashTableMenuController {
         }
         return cell;
     }
+    
     private VBox createHashCellFromList(int index, LinkedList list) {
+        // FIX BUG 3: Handle null list
+        if (list == null) {
+            return createHashCell(index, "", "");
+        }
         List<NodeData> nodes = getChainNodes(list);
         if (nodes.isEmpty()) {
             return createHashCell(index, "", "");
@@ -377,7 +395,7 @@ public class HashTableMenuController {
             return createHashCell(index, String.valueOf(first.key), first.value);
         }
     }
-    //Update hash function label
+    
     private void updateHashFunctionLabel() {
         String funcText = "h(k) = k mod " + tableSize;
         if (hashfunc != null) {
@@ -390,7 +408,6 @@ public class HashTableMenuController {
         }
     }
     
-    //Inner class to hold node data(Safe visualization cause immediate data extraction)
     private static class NodeData {
         int key;
         String value;
@@ -400,9 +417,11 @@ public class HashTableMenuController {
             this.value = value;
         }
     }
-    //Visualization methods
-        public void updateVisualization() {
-        if (collisionResolver instanceof SeparateChaining) {
+    
+    public void updateVisualization() {
+        // OOP: Use polymorphism
+        if (collisionResolver.getVisualizationType() == 
+            CollisionResolver.VisualizationType.CHAINING) {
             if (scrollPaneVertical != null) scrollPaneVertical.setVisible(true);
             if (scrollPaneHorizontal != null) scrollPaneHorizontal.setVisible(false);
             buildChainingVisualization();
@@ -412,13 +431,29 @@ public class HashTableMenuController {
             buildOpenAddressingVisualization();
         }
     }
+    
     public void setProbeStep(int step) {
-        probestep.setText("i = " + String.valueOf(step));
+        if (probestep != null) {
+            probestep.setText("i = " + step);
+        }
     }
 
     public void setResultText(String text) {
-        tfResult.setText(text);
+        if (tfResult != null) {
+            tfResult.setText(text);
+        }
     }
+    
+    // FIX BUG 1: Public getter for animation state
+    public boolean isAnimating() {
+        return isAnimating;
+    }
+    
+    // FIX BUG 1: Public setter for animation state
+    public void setAnimating(boolean animating) {
+        this.isAnimating = animating;
+    }
+    
     public GridPane getHorizontalGrid() {
         return horizontalGrid;
     }

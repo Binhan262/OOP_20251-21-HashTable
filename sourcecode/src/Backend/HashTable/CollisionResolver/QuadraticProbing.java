@@ -39,4 +39,8 @@ public class QuadraticProbing implements CollisionResolver {
             Consumer<HashTableEvent> emit) {
         return new OpenAddressingStrategy(table, this, tableSize, emit);
     }
+    @Override
+    public VisualizationType getVisualizationType() {
+        return VisualizationType.OPEN_ADDRESSING;
+    }
 }

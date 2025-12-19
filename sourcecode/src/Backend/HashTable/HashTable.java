@@ -25,11 +25,11 @@ public class HashTable {
             table[i].setEventSink(this::emit);
         }
 
-        // Let the resolver create its own strategy
+        // Let the resolver create its own strategy (Factory Method Pattern)
         this.strategy = resolver.createStrategy(table, tableSize, this::emit);
     }
     
-    //Event Sink
+    // Event Sink
     public void setEventSink(Consumer<HashTableEvent> sink) {
         this.eventSink = sink;
         for (LinkedList list : table) {
@@ -52,13 +52,20 @@ public class HashTable {
     public boolean delete(int key) {
         return strategy.delete(key);
     }
-
-    public LinkedList getTableAtIndex(int index) {
-        if (index >= 0 && index < tableSize) return table[index];
-        return null;
-    }
-
+    
+    // Getters for visualization (encapsulated access)
     public int getTableSize() {
         return tableSize;
+    }
+    
+    public LinkedList getTableAtIndex(int index) {
+        if (index >= 0 && index < tableSize) {
+            return table[index];
+        }
+        return null;
+    }
+    
+    public CollisionResolver getResolver() {
+        return resolver;
     }
 }

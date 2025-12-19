@@ -39,4 +39,9 @@ public class SeparateChaining implements CollisionResolver {
             Consumer<HashTableEvent> emit) {
         return new ChainingStrategy(table, this, emit);
     }
+    
+    @Override
+    public VisualizationType getVisualizationType() {
+        return VisualizationType.CHAINING;
+    }
 }
