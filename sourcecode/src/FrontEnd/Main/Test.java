@@ -2,6 +2,7 @@ package FrontEnd.Main;
 
 import Backend.HashTable.CollisionResolver.CollisionResolver;
 import Backend.HashTable.CollisionResolver.LinearProbing;
+import Backend.HashTable.CollisionResolver.QuadraticProbing;
 import Backend.HashTable.CollisionResolver.SeparateChaining;
 import FrontEnd.HashTableMenu.HashTableMenuController;
 import javafx.application.Application;
@@ -20,7 +21,7 @@ public class Test extends Application {
         HashTableMenuController controller = loader.getController();
 
         int tableSize = 7;
-        CollisionResolver resolver = new LinearProbing(tableSize);
+        CollisionResolver resolver = new SeparateChaining(tableSize);
 
         controller.initializeWithResolver(resolver, tableSize); 
 

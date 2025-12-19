@@ -32,19 +32,26 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            // If key already exists, update value
-            if (bucket.search(key) != null) {
-                bucket.insert(key, value);
-                return true;
-            }
-            // Check if bucket is empty
+            
+            // FIX BUG #1: Enforce single-node invariant for open addressing
             if (bucket.isEmpty()) {
+                // Empty slot - insert here
                 bucket.insert(key, value);
                 return true;
             }
-            // Bucket occupied by different key = collision
-            emit.accept(new CollisionDetectedEvent(index));
+            
+            // Bucket occupied - check if it's the same key (update case)
+            String existingValue = bucket.search(key);
+            if (existingValue != null) {
+                // Same key exists - update it
+                bucket.insert(key, value);
+                return true;
+            }
+            
+            // Bucket occupied by different key - collision, must probe next
+            emit.accept(new CollisionBlockedEvent(index));
         }
+        // Table is full
         return false;
     }
 
@@ -55,12 +62,20 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            // Try to find key in this bucket
+            
+            // FIX BUG #2: Don't terminate early on empty bucket
+            // Must complete full probe sequence
+            if (bucket.isEmpty()) {
+                continue; // Keep probing
+            }
+            
             String value = bucket.search(key);
-            if (value != null) return value;
-            // If bucket is empty, key does not exist
-            if (bucket.isEmpty()) return null;
+            if (value != null) {
+                return value; // Found it
+            }
+            // Not found in this bucket, continue probing
         }
+        // Completed full probe cycle without finding key
         return null;
     }
 
@@ -71,11 +86,19 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            // Try to find key in this bucket
-            if (bucket.delete(key)) return true;
-            // If bucket is empty, key does not exist
-            if (bucket.isEmpty()) return false;
+            
+            // FIX BUG #2: Don't terminate early on empty bucket
+            // Must complete full probe sequence
+            if (bucket.isEmpty()) {
+                continue; // Keep probing
+            }
+            
+            if (bucket.delete(key)) {
+                return true; // Successfully deleted
+            }
+            // Not found in this bucket, continue probing
         }
+        // Completed full probe cycle without finding key
         return false;
     }
 }

@@ -24,32 +24,27 @@ public class ChainingStrategy implements HashTableStrategy {
 
     @Override
     public boolean insert(int key, String value) {
-        // Compute ONE index, no probing
         int index = resolver.hash(key);
-        //Access the bucket
         emit.accept(new BucketAccessedEvent(index));
+        
         if (!table[index].isEmpty()) {
-            emit.accept(new CollisionDetectedEvent(index));
+            emit.accept(new BucketOccupiedEvent(index));
         }
 
         table[index].insert(key, value);
-        return true;
+        return true; // Always true for chaining - never full
     }
 
     @Override
     public String search(int key) {
-        // Compute ONE index, no probing
         int index = resolver.hash(key);
-        //Access the bucket
         emit.accept(new BucketAccessedEvent(index));
         return table[index].search(key);
     }
 
     @Override
     public boolean delete(int key) {
-        // Compute ONE index, no probing
         int index = resolver.hash(key);
-        //Access the bucket
         emit.accept(new BucketAccessedEvent(index));
         return table[index].delete(key);
     }
