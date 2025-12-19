@@ -1,35 +1,46 @@
 package Backend.HashTable.CollisionResolver;
 
-public class DoubleHashingMethod1 implements CollisionResolver {
-    private final int tablesize;//Not consider dynamic size change
+import Backend.HashTable.Strategy.HashTableStrategy;
+import Backend.HashTable.Strategy.OpenAddressingStrategy;
+import Backend.LinkedList.LinkedList;
+import Backend.HashTable.Event.HashTableEvent;
+import java.util.function.Consumer;
 
-    //Constructor
-    public DoubleHashingMethod1(int tablesize){
+public class DoubleHashingMethod1 implements CollisionResolver {
+    private final int tablesize;
+
+    public DoubleHashingMethod1(int tablesize) {
         this.tablesize = tablesize; 
     }
-    //Getter
-    public int getTableSize(){
+    
+    public int getTableSize() {
         return this.tablesize;
     }
 
-    public int hash2(int key){
+    public int hash2(int key) {
         return 1 + (key % (this.tablesize - 1));
     }
-    //Override methods: index = (hash(key) + i*hash2(key)) % tableSize
+    
     @Override
-    public int hash(int key){
+    public int hash(int key) {
         return key % this.tablesize;
     }
+    
     @Override   
-    public int probe(int key,int i){
+    public int probe(int key, int i) {
         return (hash(key) + i * hash2(key)) % this.tablesize;
     }
+    
     @Override
-    public String getName(){
+    public String getName() {
         return "Double Hashing Method 1";
     }
+    
     @Override
-    public boolean needsProbing(boolean empty) {
-        return true && !empty;
+    public HashTableStrategy createStrategy(
+            LinkedList[] table, 
+            int tableSize,
+            Consumer<HashTableEvent> emit) {
+        return new OpenAddressingStrategy(table, this, tableSize, emit);
     }
 }

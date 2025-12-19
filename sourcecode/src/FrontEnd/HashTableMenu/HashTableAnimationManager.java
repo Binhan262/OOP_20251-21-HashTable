@@ -2,7 +2,7 @@ package FrontEnd.HashTableMenu;
 
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.scene.control.Label;
+import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -141,12 +141,18 @@ public class HashTableAnimationManager {
                 
                 // Update probe step label
                 final int step = currentStep;
-                PauseTransition updateStep = createPause(0, () -> {
-                    controller.setProbeStep(step);
-                    controller.showProbeArrow(index);
+                PauseTransition updateStep = createPause(50, () -> {
+                    Platform.runLater(() -> {
+                        controller.setProbeStep(step);
+                        controller.showProbeArrow(index);
+                    });
                 });
                 sequence.getChildren().add(updateStep);
-                
+
+                // Add a small pause to allow UI to update
+                PauseTransition smallPause = new PauseTransition(Duration.millis(50));
+                sequence.getChildren().add(smallPause);
+
                 // Highlight the accessed bucket
                 PauseTransition highlight = createPause(STEP_DELAY, () -> 
                     highlightBucket(index, Color.YELLOW)
@@ -256,7 +262,7 @@ public class HashTableAnimationManager {
         GridPane grid = controller.getChainingGrid();
         if (grid == null) return;
         
-        // Find the first VBox at row=index (the index cell)
+        // Find the first VBox at row=index 
         grid.getChildren().stream()
             .filter(node -> node instanceof VBox)
             .filter(node -> GridPane.getRowIndex(node) != null && 

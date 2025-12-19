@@ -1,15 +1,24 @@
 package Backend.HashTable.CollisionResolver;
 
+import Backend.HashTable.Strategy.HashTableStrategy;
+import Backend.LinkedList.LinkedList;
+import java.util.function.Consumer;
+import Backend.HashTable.Event.HashTableEvent;
+
 public interface CollisionResolver {
     //Calculate initial hash index 
-    int hash (int key);
+    int hash(int key);
 
-    //Caculate next probe index at probe number i
-    int probe (int key, int i);
+    //Calculate next probe index at probe number i
+    int probe(int key, int i);
     
     //Get name of collision 
     String getName();
 
-    //Checking whether collision resolver needs probing
-    boolean needsProbing(boolean empty);
-} 
+    //Create appropriate strategy for this collision resolver
+    HashTableStrategy createStrategy(
+        LinkedList[] table, 
+        int tableSize,
+        Consumer<HashTableEvent> emit
+    );
+}

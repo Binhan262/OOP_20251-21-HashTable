@@ -18,10 +18,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.geometry.Pos;
 import javafx.geometry.HPos;
-import javafx.animation.PauseTransition;
-import javafx.animation.SequentialTransition;
-import javafx.util.Duration;
-
 import java.util.ArrayList;
 import java.util.List;
 
