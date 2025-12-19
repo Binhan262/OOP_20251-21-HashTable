@@ -1,6 +1,5 @@
 package Backend.HashTable.Event;
 
-// Open Addressing: collision blocked (error, must probe)
 public class CollisionBlockedEvent extends HashTableEvent {
     private final int index;
     

@@ -72,7 +72,6 @@ public class HelpMenuController {
 
     @FXML
     private void handleBack() {
-        // Logic to return to the Main Menu
         btnBack.getScene().getWindow().hide(); 
     }
 

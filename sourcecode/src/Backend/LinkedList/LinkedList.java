@@ -26,12 +26,10 @@ public class LinkedList {
         hashTableSink.accept(event);
     }
 
-    // FIX: Better encapsulation - still expose head for now but add iterator
     public Node getHead() {
         return head;
     }
     
-    // FIX: Add proper iteration method (better OOP)
     public void forEach(BiConsumer<Integer, String> visitor) {
         Node current = head;
         while (current != null) {

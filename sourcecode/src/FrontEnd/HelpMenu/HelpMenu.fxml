@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -7,39 +8,37 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/25"
-            xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-    <!-- Top Header -->
     <top>
-        <HBox prefHeight="44.0" prefWidth="1280.0"
-              BorderPane.alignment="CENTER">
+        <HBox prefHeight="44.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="Help Menu"
-                       style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                <Label prefHeight="27.0" prefWidth="98.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Help Menu">
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
             </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
         </HBox>
     </top>
 
-    <!-- Center Content -->
     <center>
         <Accordion BorderPane.alignment="CENTER">
 
             <panes>
 
-                <!-- Purpose of the project -->
                 <TitledPane animated="false" text="Purpose of the project">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="180.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="This Help Menu provides an overview of Hash Tables and the different Collision resolution strategies." />
+                                        <Text layoutX="10" layoutY="30" text="This Help Menu provides an overview of Hash Tables and the different Collision resolution strategies." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -52,30 +51,22 @@
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="180.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="A Hash Table maps keys to indices using a Hash Function: h(k) = k % size.
-When two keys map to the same index, a 'Collision' occurs." />
+                                        <Text layoutX="10" layoutY="30" text="A Hash Table maps keys to indices using a Hash Function: h(k) = k % size. When two keys map to the same index, a 'Collision' occurs." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
                     </content>
                 </TitledPane>
-
-                <!-- Linear Probing -->
                 <TitledPane animated="false" text="Linear Probing">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="180.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="Linear Probing resolves collisions by searching for the next available slot sequentially (index + 1).
-This method is simple to implement but can causes 'Primary Clustering'." />
+                                        <Text layoutX="10" layoutY="30" text="Linear Probing resolves collisions by searching for the next available slot sequentially (index + 1). This method is simple to implement but can causes 'Primary Clustering'." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -83,17 +74,13 @@ This method is simple to implement but can causes 'Primary Clustering'." />
                     </content>
                 </TitledPane>
 
-                <!-- Quadratic Probing -->
                 <TitledPane animated="false" text="Quadratic Probing">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="180.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="Quadratic Probing resolves collisions by using a square function (index + i²) to find the next slot.
-This method reduces 'Primary Clustering' but can cause 'Secondary Clustering'." />
+                                        <Text layoutX="10" layoutY="30" text="Quadratic Probing resolves collisions by using a square function (index + i²) to find the next slot. This method reduces 'Primary Clustering' but can cause 'Secondary Clustering'." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -101,17 +88,13 @@ This method reduces 'Primary Clustering' but can cause 'Secondary Clustering'." 
                     </content>
                 </TitledPane>
 
-                <!-- Double Hashing -->
                 <TitledPane animated="false" text="Double Hashing">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
                                 <AnchorPane prefHeight="180.0" prefWidth="1200.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="Double Hashing resolves collisions by using a second hash function to calculate the step size to find the next slot.
-This method can effectively reduce both 'Primary Clustering' and 'Secondary Clustering'." />
+                                        <Text layoutX="10" layoutY="30" text="Double Hashing resolves collisions by using a second hash function to calculate the step size to find the next slot. This method can effectively reduce both 'Primary Clustering' and 'Secondary Clustering'." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -119,17 +102,13 @@ This method can effectively reduce both 'Primary Clustering' and 'Secondary Clus
                     </content>
                 </TitledPane>
 
-                <!-- Separate Chaining -->
                 <TitledPane animated="false" text="Separate Chaining">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="180.0">
                                     <children>
-                                        <Text wrappingWidth="1150"
-                                              layoutX="10" layoutY="30"
-                                              text="Separate Chaining stores a linked list at each table index. Colliding keys are simply added to the list.
-This method prevent clustering entirely but it would create extra memory for pointers." />
+                                        <Text layoutX="10" layoutY="30" text="Separate Chaining stores a linked list at each table index. Colliding keys are simply added to the list. This method prevent clustering entirely but it would create extra memory for pointers." wrappingWidth="790.0" />
                                     </children>
                                 </AnchorPane>
                             </content>

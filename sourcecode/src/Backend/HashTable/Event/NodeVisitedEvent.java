@@ -1,6 +1,5 @@
 package Backend.HashTable.Event;
 
-// LinkedList traversal
 public class NodeVisitedEvent extends HashTableEvent {
     private final int key;
     

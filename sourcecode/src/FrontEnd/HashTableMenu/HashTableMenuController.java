@@ -129,7 +129,7 @@ public class HashTableMenuController {
     }    
     
     private void handleMenuBack() {
-        Main.setRoot("/FrontEnd/SelectionMenu/SelectionMenu.fxml");
+        Main.setPrimaryRoot("/FrontEnd/MainMenu/MainMenu.fxml");
     }
     
     private void buildOpenAddressingVisualization() {
@@ -298,13 +298,11 @@ public class HashTableMenuController {
         return nullLabel;
     }
     
-    // FIX VIOLATION #1: Use forEach instead of exposing internal structure
     private List<NodeData> getChainNodes(LinkedList list) {
         List<NodeData> nodes = new ArrayList<>();
         if (list == null) {
             return nodes;
         }
-        // Better OOP: Use forEach instead of getHead()
         list.forEach((key, value) -> {
             nodes.add(new NodeData(key, value));
         });
@@ -324,6 +322,13 @@ public class HashTableMenuController {
 
         Label valueLabel = new Label("Value: " + value);
         valueLabel.setFont(Font.font(14));
+
+        Tooltip tooltip = new Tooltip(
+            "Key: " + key +
+            "\nValue: " + value
+            );
+        tooltip.setStyle("-fx-font-size: 14px;");
+        Tooltip.install(node, tooltip);
         
         node.getChildren().addAll(keyLabel, valueLabel);
         return node;
@@ -345,12 +350,29 @@ public class HashTableMenuController {
             emptyLabel.setFont(Font.font(12));
             emptyLabel.setTextFill(Color.GRAY);
             cell.getChildren().addAll(indexLabel, emptyLabel);
+
+            Tooltip tooltip = new Tooltip(
+            "Index: " + index +
+            "\nEMPTY" 
+            );
+            tooltip.setStyle("-fx-font-size: 14px;");
+
+            Tooltip.install(cell, tooltip);
         } else {
             Label keyLabel = new Label("Key: " + key);
             keyLabel.setFont(Font.font(14));
             Label valueLabel = new Label("Value: " + value);
             valueLabel.setFont(Font.font(14));
             cell.getChildren().addAll(indexLabel, keyLabel, valueLabel);
+
+            Tooltip tooltip = new Tooltip(
+            "Index: " + index +
+            "\nKey: " + key +
+            "\nValue: " + value
+            );
+            tooltip.setStyle("-fx-font-size: 14px;");
+
+            Tooltip.install(cell, tooltip);
         }
         return cell;
     }
