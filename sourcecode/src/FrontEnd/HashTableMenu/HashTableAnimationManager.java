@@ -29,7 +29,7 @@ public class HashTableAnimationManager {
         this.hashTable = hashTable;
         this.eventQueue = new LinkedList<>();
         
-        hashTable.setEventSink(event -> eventQueue.offer(event));
+        hashTable.setEventListener(event -> eventQueue.offer(event));
     }
     
     public boolean isAnimating() {

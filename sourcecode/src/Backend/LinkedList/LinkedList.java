@@ -13,10 +13,10 @@ public class LinkedList {
         return head;
     }
     
-    public void forEach(BiConsumer<Integer, String> visitor) {
+    public void forEach(NodeVisitor visitor) {
         Node current = head;
         while (current != null) {
-            visitor.accept(current.key, current.value);
+            visitor.visit(current.key, current.value);
             current = current.next;
         }
     }
@@ -79,8 +79,6 @@ public class LinkedList {
                 return true;
             }
             cur = cur.next;
-            if (cur != null) {
-            }
         }
         return false;
     }

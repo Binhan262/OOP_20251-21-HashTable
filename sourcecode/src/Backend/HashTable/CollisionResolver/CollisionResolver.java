@@ -2,8 +2,8 @@ package Backend.HashTable.CollisionResolver;
 
 import Backend.HashTable.Strategy.HashTableStrategy;
 import Backend.LinkedList.LinkedList;
-import java.util.function.Consumer;
-import Backend.HashTable.Event.HashTableEvent;
+
+import Backend.HashTable.Event.HashTableListener;
 
 public interface CollisionResolver {
     int hash(int key);
@@ -13,7 +13,7 @@ public interface CollisionResolver {
     HashTableStrategy createStrategy(
         LinkedList[] table, 
         int tableSize,
-        Consumer<HashTableEvent> emit
+        HashTableListener listener
     );
     
     VisualizationType getVisualizationType();

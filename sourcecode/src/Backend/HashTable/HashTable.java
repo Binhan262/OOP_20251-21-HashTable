@@ -2,9 +2,9 @@ package Backend.HashTable;
 
 import Backend.HashTable.CollisionResolver.*;
 import Backend.HashTable.Event.HashTableEvent;
+import Backend.HashTable.Event.HashTableListener;
 import Backend.HashTable.Strategy.*;
 import Backend.LinkedList.LinkedList;
-import java.util.function.Consumer;
 
 public class HashTable {
 
@@ -12,7 +12,7 @@ public class HashTable {
     private final LinkedList[] table;
     private final CollisionResolver resolver;
     private HashTableStrategy strategy;
-    private Consumer<HashTableEvent> eventSink = e -> {};
+    private HashTableListener eventListener = e -> {};
 
     public HashTable(int tableSize, CollisionResolver resolver) {
         this.tableSize = tableSize;
@@ -27,18 +27,16 @@ public class HashTable {
         this.strategy = resolver.createStrategy(table, tableSize, this::emit);
     }
     
-    public void setEventSink(Consumer<HashTableEvent> sink) {
-        if (sink == null) {
-            throw new IllegalArgumentException("Event sink cannot be null");
+    public void setEventListener(HashTableListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Event listener cannot be null");
         }
-        
-        this.eventSink = sink;
-        
+        this.eventListener = listener;
     }
-    
+
     public void emit(HashTableEvent event) {
-        if (eventSink != null) {
-            eventSink.accept(event);
+        if (eventListener != null) {
+            eventListener.onEvent(event);
         }
     }
 

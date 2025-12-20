@@ -2,7 +2,7 @@ package FrontEnd.HashTableMenu;
 
 import Backend.HashTable.HashTable;
 import Backend.HashTable.CollisionResolver.*;
-import Backend.LinkedList.LinkedList;
+import Backend.LinkedList.*;
 import FrontEnd.Main.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -313,9 +313,13 @@ public class HashTableMenuController {
         if (list == null) {
             return nodes;
         }
-        list.forEach((key, value) -> {
+        list.forEach(new NodeVisitor() {
+        @Override
+        public void visit(int key, String value) {
             nodes.add(new NodeData(key, value));
+        }
         });
+
         return nodes;
     }
     
