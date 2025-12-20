@@ -14,6 +14,8 @@ import javafx.geometry.Pos;
 import javafx.geometry.HPos;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.text.Text;
+
 
 public class HashTableMenuController {
 
@@ -30,9 +32,10 @@ public class HashTableMenuController {
     @FXML private GridPane horizontalGrid;
     @FXML private GridPane chainingGrid;
     @FXML private Label probestep;
-    @FXML private Label probefunc;
+    @FXML private Label collision;
     @FXML private Label hashfunc;
     @FXML private TextField tfResult;
+    @FXML private Text probefunc;
     
     private HashTable hashTable;
     private CollisionResolver collisionResolver;
@@ -396,9 +399,13 @@ public class HashTableMenuController {
             hashfunc.setText(funcText);
         }
         
-        String probeName = collisionResolver.getName();
+        String collisionname = collisionResolver.getName();
+        if (collision != null) {
+            collision.setText(collisionname);
+        }
+        String probefuncText = collisionResolver.getFormula();
         if (probefunc != null) {
-            probefunc.setText(probeName);
+            probefunc.setText(probefuncText);
         }
     }
     

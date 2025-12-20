@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import Backend.HashTable.CollisionResolver.CollisionResolver;
 import Backend.HashTable.CollisionResolver.DoubleHashingMethod1;
+import Backend.HashTable.CollisionResolver.DoubleHashingMethod2;
 import Backend.HashTable.CollisionResolver.LinearProbing;
 import Backend.HashTable.CollisionResolver.QuadraticProbing;
 import Backend.HashTable.CollisionResolver.SeparateChaining;
@@ -38,7 +39,7 @@ public class SelectionMenuController {
 
     @FXML
     public void initialize() {
-        ObservableList<String> strategies = FXCollections.observableArrayList("Chaining", "Linear Probing", "Quadratic Probing", "Double Hashing");
+        ObservableList<String> strategies = FXCollections.observableArrayList("Chaining", "Linear Probing", "Quadratic Probing", "Double Hashing Method 1", "Double Hashing Method 2");
         cbbStrategy.setItems(strategies);
         cbbStrategy.getSelectionModel().selectFirst();
 
@@ -72,8 +73,11 @@ public class SelectionMenuController {
             case "Quadratic Probing":
                 resolver = new QuadraticProbing(tableSize);
                 break;
-            case "Double Hashing":
+            case "Double Hashing Method 1":
                 resolver = new DoubleHashingMethod1(tableSize);
+                break;
+            case "Double Hashing Method 2":
+                resolver = new DoubleHashingMethod2(tableSize);
                 break;
             default:
                 System.err.println("No strategy selected");

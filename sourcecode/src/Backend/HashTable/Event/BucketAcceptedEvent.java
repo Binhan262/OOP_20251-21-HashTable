@@ -1,9 +1,9 @@
 package Backend.HashTable.Event;
 
-public class BucketOccupiedEvent extends HashTableEvent {
+public class BucketAcceptedEvent extends HashTableEvent {
     private final int index;
     
-    public BucketOccupiedEvent(int index) {
+    public BucketAcceptedEvent(int index) {
         this.index = index;
     }
     

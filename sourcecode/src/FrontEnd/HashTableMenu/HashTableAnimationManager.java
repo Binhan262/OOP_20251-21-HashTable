@@ -81,6 +81,7 @@ public class HashTableAnimationManager {
             } else {
                 controller.setResultText("Key " + key + " not found in the table");
             }
+            controller.updateVisualization();
             controller.hideProbeArrow();
             controller.setAnimating(false);
             controller.enableButtons();
@@ -147,16 +148,29 @@ public class HashTableAnimationManager {
                 PauseTransition holdColor = new PauseTransition(Duration.millis(FLASH_DURATION));
                 sequence.getChildren().add(holdColor);
                 
-                PauseTransition unhighlight = createPause(100, () -> 
+                PauseTransition setWhite = createPause(100, () -> 
                     restoreBucketStyle(index)
                 );
-                sequence.getChildren().add(unhighlight);
-                
+                sequence.getChildren().add(setWhite);
+
                 currentStep++;
             }
-            else if (event instanceof BucketOccupiedEvent) {
-                // Chaining: bucket occupied is normal, no special highlight needed
-                // Yellow access highlight is sufficient
+            else if (event instanceof BucketAcceptedEvent) {
+                BucketAcceptedEvent bae = (BucketAcceptedEvent) event;
+                int index = bae.getIndex();
+                // Flash green to show success
+                PauseTransition setGreen = createPause(0, () ->
+                    highlightBucket(index, Color.LIGHTGREEN)
+                );
+                sequence.getChildren().add(setGreen);
+
+                PauseTransition holdGreen = new PauseTransition(Duration.millis(FLASH_DURATION));
+                sequence.getChildren().add(holdGreen);
+
+                PauseTransition setWhite = createPause(0, () ->
+                    restoreBucketStyle(index)
+                );
+                sequence.getChildren().add(setWhite);
             }
             else if (event instanceof CollisionBlockedEvent) {
                 CollisionBlockedEvent cbe = (CollisionBlockedEvent) event;
@@ -174,29 +188,6 @@ public class HashTableAnimationManager {
                     restoreBucketStyle(index)
                 );
                 sequence.getChildren().add(setWhite);
-            }
-            else if (event instanceof NodeVisitedEvent) {
-                PauseTransition pause = createPause(STEP_DELAY / 2, () -> {});
-                sequence.getChildren().add(pause);
-            }
-            else if (event instanceof NodeInsertEvent) {
-                NodeInsertEvent nie = (NodeInsertEvent) event;
-                
-                PauseTransition flash = createPause(FLASH_DURATION, () -> 
-                    controller.setResultText("Inserting key " + nie.getKey() + "...")
-                );
-                sequence.getChildren().add(flash);
-
-                PauseTransition holdColor = new PauseTransition(Duration.millis(FLASH_DURATION));
-                sequence.getChildren().add(holdColor);
-            }
-            else if (event instanceof NodeDeletedEvent) {
-                NodeDeletedEvent nde = (NodeDeletedEvent) event;
-                
-                PauseTransition flash = createPause(FLASH_DURATION, () -> 
-                    controller.setResultText("Deleting key " + nde.getKey() + "...")
-                );
-                sequence.getChildren().add(flash);
             }
         }
         

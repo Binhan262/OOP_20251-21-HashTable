@@ -22,7 +22,6 @@ public class HashTable {
         // Initialize all lists
         for (int i = 0; i < tableSize; i++) {
             table[i] = new LinkedList();
-            table[i].setHashTableSink(this::emit);
         }
 
         this.strategy = resolver.createStrategy(table, tableSize, this::emit);
