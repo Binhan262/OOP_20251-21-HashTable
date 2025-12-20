@@ -26,12 +26,8 @@ public class ChainingStrategy implements HashTableStrategy {
     public boolean insert(int key, String value) {
         int index = resolver.hash(key);
         emit.accept(new BucketAccessedEvent(index));
-        
-        if (!table[index].isEmpty()) {
-            emit.accept(new BucketOccupiedEvent(index));
-        }
-
         table[index].insert(key, value);
+        emit.accept(new BucketAcceptedEvent(index));
         return true; // Always true for chaining - never full
     }
 
@@ -39,13 +35,27 @@ public class ChainingStrategy implements HashTableStrategy {
     public String search(int key) {
         int index = resolver.hash(key);
         emit.accept(new BucketAccessedEvent(index));
-        return table[index].search(key);
-    }
+        String result = table[index].search(key);
+        if(result != null) {
+            emit.accept(new BucketAcceptedEvent(index));
+        }
+        else {
+            emit.accept(new CollisionBlockedEvent(index));
+        }
+        return result;
+    }  
 
     @Override
     public boolean delete(int key) {
         int index = resolver.hash(key);
         emit.accept(new BucketAccessedEvent(index));
-        return table[index].delete(key);
+        boolean removed = table[index].delete(key);
+        if(removed) {
+            emit.accept(new BucketAcceptedEvent(index));
+        }
+        else {
+            emit.accept(new CollisionBlockedEvent(index));
+        }
+        return removed;
     }
 }

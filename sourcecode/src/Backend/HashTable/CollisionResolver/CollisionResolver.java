@@ -9,7 +9,7 @@ public interface CollisionResolver {
     int hash(int key);
     int probe(int key, int i);
     String getName();
-    
+    String getFormula();
     HashTableStrategy createStrategy(
         LinkedList[] table, 
         int tableSize,

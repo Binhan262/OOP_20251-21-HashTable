@@ -32,11 +32,10 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #1: Enforce single-node invariant for open addressing
             if (bucket.isEmpty()) {
                 // Empty slot - insert here
                 bucket.insert(key, value);
+                emit.accept(new BucketAcceptedEvent(index));
                 return true;
             }
             
@@ -45,9 +44,9 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             if (existingValue != null) {
                 // Same key exists - update it
                 bucket.insert(key, value);
+                emit.accept(new BucketAcceptedEvent(index));
                 return true;
             }
-            
             // Bucket occupied by different key - collision, must probe next
             emit.accept(new CollisionBlockedEvent(index));
         }
@@ -62,16 +61,18 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #2: Don't terminate early on empty bucket
-            // Must complete full probe sequence
             if (bucket.isEmpty()) {
+                emit.accept(new CollisionBlockedEvent(index));
                 continue; // Keep probing
             }
             
             String value = bucket.search(key);
             if (value != null) {
+                emit.accept(new BucketAcceptedEvent(index));
                 return value; // Found it
+            }
+            else {
+                emit.accept(new CollisionBlockedEvent(index));
             }
             // Not found in this bucket, continue probing
         }
@@ -86,15 +87,17 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #2: Don't terminate early on empty bucket
-            // Must complete full probe sequence
             if (bucket.isEmpty()) {
+                emit.accept(new CollisionBlockedEvent(index));
                 continue; // Keep probing
             }
             
             if (bucket.delete(key)) {
+                emit.accept(new BucketAcceptedEvent(index));
                 return true; // Successfully deleted
+            }
+            else {
+                emit.accept(new CollisionBlockedEvent(index));
             }
             // Not found in this bucket, continue probing
         }

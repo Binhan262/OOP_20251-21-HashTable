@@ -44,4 +44,8 @@ public class SeparateChaining implements CollisionResolver {
     public VisualizationType getVisualizationType() {
         return VisualizationType.CHAINING;
     }
+    @Override
+    public String getFormula() {
+        return "No probing needed in Separate Chaining.";
+    }
 }
