@@ -1,9 +1,5 @@
 package Backend.LinkedList;
 
-import java.util.function.Consumer;
-import java.util.function.BiConsumer;
-import Backend.HashTable.Event.HashTableEvent;
-
 public class LinkedList {
     private Node head;
     
@@ -15,10 +11,10 @@ public class LinkedList {
         return head;
     }
     
-    public void forEach(BiConsumer<Integer, String> visitor) {
+    public void forEach(NodeVisitor visitor) {
         Node current = head;
         while (current != null) {
-            visitor.accept(current.key, current.value);
+            visitor.visit(current.key, current.value);
             current = current.next;
         }
     }
@@ -81,8 +77,6 @@ public class LinkedList {
                 return true;
             }
             cur = cur.next;
-            if (cur != null) {
-            }
         }
         return false;
     }

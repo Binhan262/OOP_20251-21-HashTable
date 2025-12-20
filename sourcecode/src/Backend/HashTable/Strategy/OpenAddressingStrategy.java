@@ -4,38 +4,37 @@ import Backend.HashTable.Event.*;
 import Backend.HashTable.CollisionResolver.CollisionResolver;
 import Backend.LinkedList.LinkedList;
 
-import java.util.function.Consumer;
 
 public class OpenAddressingStrategy implements HashTableStrategy {
 
     private final LinkedList[] table;
     private final CollisionResolver resolver;
     private final int tableSize;
-    private final Consumer<HashTableEvent> emit;
+    private final HashTableListener listener;
 
     public OpenAddressingStrategy(
-            LinkedList[] table,
-            CollisionResolver resolver,
-            int tableSize,
-            Consumer<HashTableEvent> emit
+        LinkedList[] table,
+        CollisionResolver resolver,
+        int tableSize,
+        HashTableListener listener
     ) {
         this.table = table;
         this.resolver = resolver;
         this.tableSize = tableSize;
-        this.emit = emit;
+        this.listener = listener;
     }
 
     @Override
     public boolean insert(int key, String value) {
         for (int step = 0; step < tableSize; step++) {
             int index = resolver.probe(key, step);
-            emit.accept(new BucketAccessedEvent(index));
+            listener.onEvent(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
             if (bucket.isEmpty()) {
                 // Empty slot - insert here
                 bucket.insert(key, value);
-                emit.accept(new BucketAcceptedEvent(index));
+                listener.onEvent(new BucketAcceptedEvent(index));
                 return true;
             }
             
@@ -44,11 +43,11 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             if (existingValue != null) {
                 // Same key exists - update it
                 bucket.insert(key, value);
-                emit.accept(new BucketAcceptedEvent(index));
+                listener.onEvent(new BucketAcceptedEvent(index));
                 return true;
             }
             // Bucket occupied by different key - collision, must probe next
-            emit.accept(new CollisionBlockedEvent(index));
+            listener.onEvent(new CollisionBlockedEvent(index));
         }
         // Table is full
         return false;
@@ -58,21 +57,21 @@ public class OpenAddressingStrategy implements HashTableStrategy {
     public String search(int key) {
         for (int step = 0; step < tableSize; step++) {
             int index = resolver.probe(key, step);
-            emit.accept(new BucketAccessedEvent(index));
+            listener.onEvent(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
             if (bucket.isEmpty()) {
-                emit.accept(new CollisionBlockedEvent(index));
+                listener.onEvent(new CollisionBlockedEvent(index));
                 continue; // Keep probing
             }
             
             String value = bucket.search(key);
             if (value != null) {
-                emit.accept(new BucketAcceptedEvent(index));
+                listener.onEvent(new BucketAcceptedEvent(index));
                 return value; // Found it
             }
             else {
-                emit.accept(new CollisionBlockedEvent(index));
+                listener.onEvent(new CollisionBlockedEvent(index));
             }
             // Not found in this bucket, continue probing
         }
@@ -84,20 +83,20 @@ public class OpenAddressingStrategy implements HashTableStrategy {
     public boolean delete(int key) {
         for (int step = 0; step < tableSize; step++) {
             int index = resolver.probe(key, step);
-            emit.accept(new BucketAccessedEvent(index));
+            listener.onEvent(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
             if (bucket.isEmpty()) {
-                emit.accept(new CollisionBlockedEvent(index));
+                listener.onEvent(new CollisionBlockedEvent(index));
                 continue; // Keep probing
             }
             
             if (bucket.delete(key)) {
-                emit.accept(new BucketAcceptedEvent(index));
+                listener.onEvent(new BucketAcceptedEvent(index));
                 return true; // Successfully deleted
             }
             else {
-                emit.accept(new CollisionBlockedEvent(index));
+                listener.onEvent(new CollisionBlockedEvent(index));
             }
             // Not found in this bucket, continue probing
         }
