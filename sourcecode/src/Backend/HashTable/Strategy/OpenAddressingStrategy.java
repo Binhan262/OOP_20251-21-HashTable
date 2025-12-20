@@ -32,8 +32,6 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #1: Enforce single-node invariant for open addressing
             if (bucket.isEmpty()) {
                 // Empty slot - insert here
                 bucket.insert(key, value);
@@ -62,9 +60,6 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #2: Don't terminate early on empty bucket
-            // Must complete full probe sequence
             if (bucket.isEmpty()) {
                 continue; // Keep probing
             }
@@ -86,9 +81,6 @@ public class OpenAddressingStrategy implements HashTableStrategy {
             emit.accept(new BucketAccessedEvent(index));
 
             LinkedList bucket = table[index];
-            
-            // FIX BUG #2: Don't terminate early on empty bucket
-            // Must complete full probe sequence
             if (bucket.isEmpty()) {
                 continue; // Keep probing
             }
