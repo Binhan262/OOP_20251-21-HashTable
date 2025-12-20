@@ -3,8 +3,8 @@ package Backend.HashTable.CollisionResolver;
 import Backend.HashTable.Strategy.ChainingStrategy;
 import Backend.HashTable.Strategy.HashTableStrategy;
 import Backend.LinkedList.LinkedList;
-import Backend.HashTable.Event.HashTableEvent;
-import java.util.function.Consumer;
+import Backend.HashTable.Event.HashTableListener;
+
 
 public class SeparateChaining implements CollisionResolver {
     private final int tablesize;
@@ -36,8 +36,8 @@ public class SeparateChaining implements CollisionResolver {
     public HashTableStrategy createStrategy(
             LinkedList[] table, 
             int tableSize,
-            Consumer<HashTableEvent> emit) {
-        return new ChainingStrategy(table, this, emit);
+            HashTableListener listener) {
+        return new ChainingStrategy(table, this, listener);
     }
     
     @Override

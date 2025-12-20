@@ -5,12 +5,12 @@
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.controls.jar",
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jfx.incubator.input.jar",
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.fxml.jar",
-        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.swing.jar",
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.graphics.jar",
+        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.swing.jar",
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.web.jar",
         "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx-swt.jar",
-        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.media.jar",
-        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jdk.jsobject.jar"
+        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\jdk.jsobject.jar",
+        "d:\\Code\\Java\\OOP\\You despated right\\Miniproject2\\sourcecode\\lib\\javafx.25.0.1\\javafx.media.jar"
     ],
     "java.project.sourcePaths": [
         "sourcecode\\src"

@@ -3,8 +3,8 @@ package Backend.HashTable.CollisionResolver;
 import Backend.HashTable.Strategy.HashTableStrategy;
 import Backend.HashTable.Strategy.OpenAddressingStrategy;
 import Backend.LinkedList.LinkedList;
-import Backend.HashTable.Event.HashTableEvent;
-import java.util.function.Consumer;
+import Backend.HashTable.Event.HashTableListener;
+
 
 public class DoubleHashingMethod2 implements CollisionResolver {
     private final int tablesize;
@@ -60,8 +60,8 @@ public class DoubleHashingMethod2 implements CollisionResolver {
     public HashTableStrategy createStrategy(
             LinkedList[] table, 
             int tableSize,
-            Consumer<HashTableEvent> emit) {
-        return new OpenAddressingStrategy(table, this, tableSize, emit);
+            HashTableListener listener) {
+        return new OpenAddressingStrategy(table, this, tableSize, listener);
     }
     @Override
     public VisualizationType getVisualizationType() {
