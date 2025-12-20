@@ -24,9 +24,9 @@ public class Main extends Application {
         Parent primaryRoot = loadFXML("/FrontEnd/MainMenu/MainMenu.fxml");
         mainScene = new Scene(primaryRoot);
 
-        stage.setScene(mainScene);
-        stage.setTitle("Hash Table Visualization");
-        stage.show();
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("Hash Table Visualization");
+        primaryStage.show();
 
         Parent secondaryRoot = loadFXML("/FrontEnd/HelpMenu/HelpMenu.fxml");
         secondaryScene = new Scene(secondaryRoot);

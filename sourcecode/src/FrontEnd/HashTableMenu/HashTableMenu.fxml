@@ -24,7 +24,8 @@
               <menus>
                 <Menu mnemonicParsing="false" text="Option">
                   <items>
-                        <MenuItem fx:id="menuBack" mnemonicParsing="false" text="Return to Main Menu" />
+                        <MenuItem fx:id="menuBack" mnemonicParsing="false" onAction="#handleMenuBack" text="Return to Main Menu" />
+                        <MenuItem fx:id="menuHelp" mnemonicParsing="false" onAction="#handleMenuHelp" text="Help" />
                   </items>
                 </Menu>
               </menus>

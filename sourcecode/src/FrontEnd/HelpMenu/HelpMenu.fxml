@@ -14,59 +14,69 @@
 <BorderPane prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
     <top>
-        <HBox prefHeight="44.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+        <HBox prefHeight="44.0" BorderPane.alignment="CENTER">
             <children>
-                <Label prefHeight="27.0" prefWidth="98.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Help Menu">
-               <font>
-                  <Font size="16.0" />
-               </font></Label>
+                <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Help Menu">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
             </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
+            <padding>
+                <Insets bottom="5" left="5" right="5" top="5" />
+            </padding>
         </HBox>
     </top>
 
     <center>
-        <Accordion BorderPane.alignment="CENTER">
-
+        <Accordion>
             <panes>
-
-                <TitledPane animated="false" text="Purpose of the project">
+                <TitledPane animated="false" text="Purpose of the Project">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="This Help Menu provides an overview of Hash Tables and the different Collision resolution strategies." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="The purpose of this project is to provide an interactive visualization of hash table data structures and their collision resolution strategies. By visualizing insert, search, and delete operations step-by-step, users can better understand how hash tables work internally and how different collision handling methods affect performance and behavior. This tool is designed for educational purposes, especially for learning data structures and algorithms." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
                     </content>
                 </TitledPane>
-
-                <!-- What is a Hash Table? -->
                 <TitledPane animated="false" text="What is a Hash Table?">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="A Hash Table maps keys to indices using a Hash Function: h(k) = k % size. When two keys map to the same index, a 'Collision' occurs." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="A hash table is a data structure that stores key–value pairs and provides fast access to data. A hash function converts a key into an index within a fixed-size table, commonly using a function such as h(k) = k mod tableSize. Ideally, each key maps to a unique index. However, when two or more keys map to the same index, a collision occurs, and a collision resolution strategy must be used." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
                     </content>
                 </TitledPane>
+
                 <TitledPane animated="false" text="Linear Probing">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="Linear Probing resolves collisions by searching for the next available slot sequentially (index + 1). This method is simple to implement but can causes 'Primary Clustering'." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="Linear Probing is an open addressing collision resolution technique. When a collision occurs, the algorithm checks the next available index sequentially (index + 1, index + 2, and so on) until an empty slot is found. Linear probing is simple and memory-efficient, but it suffers from primary clustering, where long blocks of occupied slots form and degrade performance." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -78,23 +88,30 @@
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="Quadratic Probing resolves collisions by using a square function (index + i²) to find the next slot. This method reduces 'Primary Clustering' but can cause 'Secondary Clustering'." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="Quadratic Probing resolves collisions by using a quadratic function to determine probe intervals, typically     (index + i²). This spreads probes farther apart compared to linear probing, reducing primary clustering. However, keys with the same initial hash may still follow the same probe sequence, leading to secondary clustering." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>
                         </ScrollPane>
                     </content>
                 </TitledPane>
-
                 <TitledPane animated="false" text="Double Hashing">
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0" prefWidth="1200.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="Double Hashing resolves collisions by using a second hash function to calculate the step size to find the next slot. This method can effectively reduce both 'Primary Clustering' and 'Secondary Clustering'." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="Double Hashing uses a second hash function to compute the probe step size. When a collision occurs, the next index is calculated using index + i × h₂(key). This approach significantly reduces both primary and secondary clustering and provides better distribution of keys, at the cost of increased computational complexity." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>
@@ -106,9 +123,13 @@
                     <content>
                         <ScrollPane fitToWidth="true">
                             <content>
-                                <AnchorPane prefHeight="180.0">
+                                <AnchorPane prefHeight="200">
                                     <children>
-                                        <Text layoutX="10" layoutY="30" text="Separate Chaining stores a linked list at each table index. Colliding keys are simply added to the list. This method prevent clustering entirely but it would create extra memory for pointers." wrappingWidth="790.0" />
+                                        <Text layoutX="10" layoutY="30" text="Separate Chaining handles collisions by storing a linked list at each table index. All keys that hash to the same index are stored in the list. This method completely avoids clustering and allows the table to exceed its initial capacity. However, it requires extra memory for pointers and may degrade performance if chains become long." wrappingWidth="790">
+                                            <font>
+                                                <Font size="16" />
+                                            </font>
+                                        </Text>
                                     </children>
                                 </AnchorPane>
                             </content>

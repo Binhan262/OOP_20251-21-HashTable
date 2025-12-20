@@ -69,7 +69,7 @@ public class DoubleHashingMethod2 implements CollisionResolver {
     }
     @Override
     public String getFormula() {
-        return "h(k, i) = (h(k) + i × h₂(k)) mod " + tablesize
+        return "h(k, i) = (h(k) + i x h₂(k)) mod " + tablesize
          + "\nwhere h₂(k) = " + prime + " - (k mod " + prime + ")";
     }
 }

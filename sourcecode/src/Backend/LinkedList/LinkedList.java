@@ -1,5 +1,7 @@
 package Backend.LinkedList;
 
+import java.util.function.BiConsumer;
+
 public class LinkedList {
     private Node head;
     
