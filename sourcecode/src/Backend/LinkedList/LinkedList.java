@@ -1,8 +1,6 @@
 package Backend.LinkedList;
 
-import java.util.function.Consumer;
 import java.util.function.BiConsumer;
-import Backend.HashTable.Event.HashTableEvent;
 
 public class LinkedList {
     private Node head;
