@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FrontEnd.HashTableMenu.HashTableMenuController">
    <top>
@@ -100,11 +101,11 @@
    <bottom>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="100.0" prefWidth="362.0">
+            <VBox alignment="CENTER" prefHeight="102.0" prefWidth="496.0">
                <children>
                   <HBox prefHeight="26.0" prefWidth="138.0">
                      <children>
-                        <Label text="Probe Function: ">
+                        <Label text="Collision Strategy:">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
@@ -112,7 +113,7 @@
                               <Font name="System Bold Italic" size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="probefunc" text="Linear Probing">
+                        <Label fx:id="collision" text="Linear Probing">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -160,6 +161,23 @@
                               <Insets left="5.0" />
                            </padding>
                         </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="26.0" prefWidth="138.0">
+                     <children>
+                        <Label prefHeight="26.0" prefWidth="154.0" text="Probe Function: ">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                           <font>
+                              <Font name="System Bold Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <Text fx:id="probefunc" strokeType="OUTSIDE" strokeWidth="0.0" text="h(k,i)=" wrappingWidth="361.6000051498413">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Text>
                      </children>
                   </HBox>
                </children>

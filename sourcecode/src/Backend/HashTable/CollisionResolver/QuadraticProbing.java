@@ -43,4 +43,8 @@ public class QuadraticProbing implements CollisionResolver {
     public VisualizationType getVisualizationType() {
         return VisualizationType.OPEN_ADDRESSING;
     }
+    @Override
+    public String getFormula() {
+        return "h(k, i) = (h(k) + i²) mod " + tablesize;   
+    }
 }

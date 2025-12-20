@@ -10,15 +10,33 @@ public class DoubleHashingMethod2 implements CollisionResolver {
     private final int tablesize;
     private final int prime;
 
-    public DoubleHashingMethod2(int tablesize, int prime) {
+    public DoubleHashingMethod2(int tablesize) {
         this.tablesize = tablesize; 
-        this.prime = prime;
+        this.prime = previousPrime(tablesize);
     }
     
     public int getTableSize() {
         return this.tablesize;
     }
-
+    //Find biggest prime smaller than tablesize
+    private static boolean isPrime(int n) {
+        if(n<=1) return false;
+        if(n<=3) return true;
+        if(n%2==0||n%3==0) return false;
+        //Prime must be of form 6k +/- 1
+        for (int i=5; i*i<= n; i+= 6) {
+            if (n%i==0||n%(i+2)==0) return false;
+        }
+        return true;
+    }
+    private static int previousPrime(int n) {
+        for (int i=n-1;i>=2;i--) {
+            if (isPrime(i)) {
+                return i;
+            }
+        }
+        return 2; //Fallback
+    }
     public int hash2(int key) {
         return prime - (key % prime);
     }
@@ -48,5 +66,10 @@ public class DoubleHashingMethod2 implements CollisionResolver {
     @Override
     public VisualizationType getVisualizationType() {
         return VisualizationType.OPEN_ADDRESSING;
+    }
+    @Override
+    public String getFormula() {
+        return "h(k, i) = (h(k) + i × h₂(k)) mod " + tablesize
+         + "\nwhere h₂(k) = " + prime + " - (k mod " + prime + ")";
     }
 }

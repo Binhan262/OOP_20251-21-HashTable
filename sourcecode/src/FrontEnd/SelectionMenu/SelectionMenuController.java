@@ -39,7 +39,7 @@ public class SelectionMenuController {
 
     @FXML
     public void initialize() {
-        ObservableList<String> strategies = FXCollections.observableArrayList("Chaining", "Linear Probing", "Quadratic Probing", "Double Hashing");
+        ObservableList<String> strategies = FXCollections.observableArrayList("Chaining", "Linear Probing", "Quadratic Probing", "Double Hashing Method 1", "Double Hashing Method 2");
         cbbStrategy.setItems(strategies);
         cbbStrategy.getSelectionModel().selectFirst();
 

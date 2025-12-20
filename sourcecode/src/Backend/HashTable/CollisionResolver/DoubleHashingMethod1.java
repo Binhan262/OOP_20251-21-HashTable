@@ -47,4 +47,9 @@ public class DoubleHashingMethod1 implements CollisionResolver {
     public VisualizationType getVisualizationType() {
         return VisualizationType.OPEN_ADDRESSING;
     }
+    @Override
+    public String getFormula() {
+        return "h(k, i) = (h(k) + i × h₂(k)) mod " + tablesize
+         + "\nwhere h₂(k) = 1 + (k mod (" + tablesize + " - 1))";
+    }
 }
