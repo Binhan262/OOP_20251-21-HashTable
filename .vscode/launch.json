@@ -3,45 +3,12 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "FrontEnd.Main.Test",
-            "projectName": "Miniproject2_67f78dd3",
-            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
-        },
-        {
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "FrontEnd.Main.Test",
-            "projectName": "OOP_20251-21-HashTable_d91a2efb",
-            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
-        },
-        {
-            "type": "java",
-            "name": "Test",
-            "request": "launch",
-            "mainClass": "FrontEnd.Main.Test",
-            "projectName": "OOP.20251-21_2a10f80e",
-            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
-        },
-        {
-            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "FrontEnd.Main.Main",
-            "projectName": "OOP.20251-21_2a10f80e",
+            "projectName": "OOP_20251-21-HashTable_d91a2efb",
             "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
         },
-        {
-            "type": "java",
-            "name": "Main",
-            "request": "launch",
-            "mainClass": "FrontEnd.HashtableMenu.HashTableScreen",
-            "projectName": "OOP.20251-21_170f9d59",
-            "vmArgs": "--module-path sourcecode/lib/javafx.25.0.1 --add-modules javafx.controls,javafx.fxml -Djava.library.path=sourcecode/lib/javafx.25.0.1/bin"
-        }
+        
     ]
 }

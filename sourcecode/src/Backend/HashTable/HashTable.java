@@ -22,15 +22,12 @@ public class HashTable {
         // Initialize all lists
         for (int i = 0; i < tableSize; i++) {
             table[i] = new LinkedList();
-            // 🔥 CRITICAL FIX: LinkedList forwards events through HashTable
             table[i].setHashTableSink(this::emit);
         }
 
-        // Let the resolver create its own strategy (Factory Method Pattern)
         this.strategy = resolver.createStrategy(table, tableSize, this::emit);
     }
     
-    // 🔥 CRITICAL FIX: HashTable is SINGLE SOURCE OF TRUTH for events
     public void setEventSink(Consumer<HashTableEvent> sink) {
         if (sink == null) {
             throw new IllegalArgumentException("Event sink cannot be null");
@@ -38,12 +35,8 @@ public class HashTable {
         
         this.eventSink = sink;
         
-        // NOTE: We do NOT call setHashTableSink() here again
-        // Lists already have it set in constructor
     }
     
-    // 🔥 CRITICAL: All events flow through this single emission point
-    // LinkedLists forward here, then this forwards to AnimationManager
     public void emit(HashTableEvent event) {
         if (eventSink != null) {
             eventSink.accept(event);
@@ -78,19 +71,3 @@ public class HashTable {
         return resolver;
     }
 }
-
-/*
- * 🔥 CRITICAL ARCHITECTURE:
- * 
- * Event Flow (CORRECT):
- * LinkedList → HashTable.emit() → AnimationManager
- * 
- * Event Flow (WRONG - OLD CODE):
- * LinkedList → AnimationManager (causes interleaving!)
- * HashTable → AnimationManager (causes interleaving!)
- * 
- * RULE: Only ONE class emits to external world: HashTable
- * All internal components forward through HashTable.emit()
- * 
- * This fixes the JVM freeze bug on 3rd insert in chaining.
- */
