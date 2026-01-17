@@ -36,6 +36,7 @@ public class HashTableMenuController {
     @FXML private Label hashfunc;
     @FXML private TextField tfResult;
     @FXML private Text probefunc;
+    @FXML private MenuItem menuHelp;
     
     private HashTable hashTable;
     private CollisionResolver collisionResolver;
@@ -131,8 +132,14 @@ public class HashTableMenuController {
         }
     }    
     
+    @FXML
     private void handleMenuBack() {
         Main.setPrimaryRoot("/FrontEnd/MainMenu/MainMenu.fxml");
+    }
+
+    @FXML
+    private void handleMenuHelp() {
+        Main.showSecondaryStage("/FrontEnd/HelpMenu/HelpMenu.fxml");
     }
     
     private void buildOpenAddressingVisualization() {
